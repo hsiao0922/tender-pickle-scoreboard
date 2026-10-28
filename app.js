@@ -4,6 +4,7 @@
 
   var E = PickleEngine;
   var KEY = 'tps.v1';
+  var VERSION = '1.2.2'; // keep in sync with CACHE in sw.js
 
   var I18N = {
     'zh-TW': {
@@ -420,6 +421,7 @@
   if (canSpeak && speechSynthesis.getVoices) speechSynthesis.getVoices(); // warm up the voice list
 
   /* ---------- go ---------- */
+  document.querySelectorAll('.ver').forEach(function (el) { el.textContent = '· v' + VERSION; });
   if (!canSpeak) { $('voice').hidden = true; $('voice-rows').hidden = true; }
   render();
   requestWake();
