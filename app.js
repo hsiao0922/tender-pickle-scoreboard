@@ -4,7 +4,7 @@
 
   var E = PickleEngine;
   var KEY = 'tps.v1';
-  var VERSION = '1.2.2'; // keep in sync with CACHE in sw.js
+  var VERSION = '1.3.0'; // keep in sync with CACHE in sw.js
 
   var I18N = {
     'zh-TW': {
@@ -22,6 +22,7 @@
       voiceOn: '語音報分：開', voiceOff: '語音報分：關', voiceTest: '語音報分已開啟',
       sVoice: '語音報分', sVoiceTeam: '報分前先講發球隊名稱', sRate: '語速', sVolume: '音量',
       spSideOut: '換發', spServing: '{name}發球', spWins: '{name}獲勝，{a}比{b}', spServer: '{n}',
+      netOn: '連線中', netOff: '離線（仍可使用）',
       sVoiceName: '語音', voiceAuto: '自動（優先台灣國語）', voiceTry: '試聽', voiceSample: '換發，4，2，1',
       noTwVoice: '找不到台灣國語聲音，可能會用其他中文口音。請在裝置的語音設定下載「中文（台灣）」。'
     },
@@ -40,6 +41,7 @@
       voiceOn: 'Voice score: on', voiceOff: 'Voice score: off', voiceTest: 'Voice score is on',
       sVoice: 'Announce score by voice', sVoiceTeam: 'Say the serving team name first', sRate: 'Speed', sVolume: 'Volume',
       spSideOut: 'Side out', spServing: '{name} serving', spWins: '{name} wins, {a} to {b}', spServer: '{n}',
+      netOn: 'Online', netOff: 'Offline (still works)',
       sVoiceName: 'Voice', voiceAuto: 'Auto', voiceTry: 'Test voice', voiceSample: 'Side out, 4, 2, 1',
       noTwVoice: 'No Taiwan Mandarin voice found; another Chinese voice may be used. Download "Chinese (Taiwan)" in your device voice settings.'
     }
@@ -153,6 +155,7 @@
     vb.setAttribute('aria-pressed', String(vOn));
     vb.setAttribute('aria-label', t(vOn ? 'voiceOn' : 'voiceOff'));
     vb.title = t(vOn ? 'voiceOn' : 'voiceOff');
+    renderNet();
 
     var over = $('over');
     over.hidden = !g.over;
@@ -420,10 +423,37 @@
   }
   if (canSpeak && speechSynthesis.getVoices) speechSynthesis.getVoices(); // warm up the voice list
 
+  /* ---------- connection dot: green online, red offline ---------- */
+  var netEl = $('net'), pingOk = true;
+  function renderNet() {
+    var on = navigator.onLine && pingOk;
+    netEl.classList.toggle('off', !on);
+    var label = t(on ? 'netOn' : 'netOff');
+    netEl.title = label;
+    netEl.setAttribute('aria-label', label);
+  }
+  // navigator.onLine only says "has a network"; also check the site is really reachable.
+  // The query string makes the request miss the service worker cache, so it hits the network.
+  function ping() {
+    if (!navigator.onLine) { pingOk = false; renderNet(); return; }
+    if (!/^https?:$/.test(location.protocol) || !window.AbortController) { pingOk = true; renderNet(); return; }
+    var ctl = new AbortController();
+    var timer = setTimeout(function () { ctl.abort(); }, 5000);
+    fetch('manifest.json?ping=' + Date.now(), { cache: 'no-store', signal: ctl.signal })
+      .then(function (r) { pingOk = r.ok; })
+      .catch(function () { pingOk = false; })
+      .then(function () { clearTimeout(timer); renderNet(); });
+  }
+  window.addEventListener('online', ping);
+  window.addEventListener('offline', ping);
+  document.addEventListener('visibilitychange', function () { if (document.visibilityState === 'visible') ping(); });
+  setInterval(ping, 30000);
+
   /* ---------- go ---------- */
   document.querySelectorAll('.ver').forEach(function (el) { el.textContent = '· v' + VERSION; });
   if (!canSpeak) { $('voice').hidden = true; $('voice-rows').hidden = true; }
   render();
+  ping();
   requestWake();
   if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) {
     navigator.serviceWorker.register('sw.js').catch(function () { /* offline cache is optional */ });

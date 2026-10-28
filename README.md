@@ -17,6 +17,7 @@ By **Tender Pickle (嫩肌匹克)** · MIT License
 - Team names: leave empty to use "Left Team" / "Right Team" · 隊名可留空，預設「左邊隊伍 / 右邊隊伍」
 - Undo, swap sides, hold-to-reset new game (no accidental resets) · 復原、換邊、長按新局
 - Works on phone, tablet and desktop, portrait and landscape · 手機、平板、電腦皆可
+- Connection dot next to the score call: green = online, red = offline (the scoreboard keeps working offline) · 連線燈號：綠色連線、紅色離線
 - Installable (PWA) and works offline; screen stays awake while in use · 可安裝、可離線、螢幕恆亮
 - No account, no tracking, no ads; the game is stored only in your browser (`localStorage`) · 無廣告、無追蹤
 

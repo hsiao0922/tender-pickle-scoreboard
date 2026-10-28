@@ -168,6 +168,16 @@ button { font: inherit; color: inherit; cursor: pointer; }
   gap: 10px 18px;
   padding: 10px;
 }
+.net {
+  flex: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #2ecc71;
+  border: 2px solid rgba(255, 246, 224, .85);
+  box-shadow: 0 0 8px rgba(46, 204, 113, .8);
+}
+.net.off { background: #ff3b30; box-shadow: 0 0 8px rgba(255, 59, 48, .85); }
 #callout-box {
   display: flex;
   align-items: baseline;
