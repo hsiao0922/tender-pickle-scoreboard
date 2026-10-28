@@ -13,7 +13,7 @@ By **Tender Pickle (嫩肌匹克)** · MIT License
 - Only the serving team can score; the receiving team's button is locked · 接發方按鈕鎖定
 - Doubles (with the `0-0-2` start rule) and singles · 雙打、單打
 - Play to 11 / 15 / 21, win-by-2 optional · 目標分數、是否領先 2 分
-- Voice score call (speaker button, off by default): speaks e.g. "4, 2, 1" after every rally, says "Side out", announces the winner; optional serving team name, voice picker with test button (prefers Taiwan Mandarin `zh-TW`), speed and volume · 語音報分（喇叭按鈕，預設關閉）
+- Voice score call (speaker button, off by default): speaks numbers only, e.g. "4, 2, 1" (server score, receiver score, server number), after every rally, says "Side out", announces the winner; optional serving team name, voice picker with test button (prefers Taiwan Mandarin `zh-TW`), speed and volume · 語音報分（喇叭按鈕，預設關閉）
 - Team names: leave empty to use "Left Team" / "Right Team" · 隊名可留空，預設「左邊隊伍 / 右邊隊伍」
 - Undo, swap sides, hold-to-reset new game (no accidental resets) · 復原、換邊、長按新局
 - Works on phone, tablet and desktop, portrait and landscape · 手機、平板、電腦皆可

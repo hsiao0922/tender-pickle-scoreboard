@@ -20,8 +20,8 @@
       nameLabel: '隊名（可留空）',
       voiceOn: '語音報分：開', voiceOff: '語音報分：關', voiceTest: '語音報分已開啟',
       sVoice: '語音報分', sVoiceTeam: '報分前先講發球隊名稱', sRate: '語速', sVolume: '音量',
-      spSideOut: '換發', spServing: '{name}發球', spWins: '{name}獲勝，{a}比{b}', spServer: '第{n}發',
-      sVoiceName: '語音', voiceAuto: '自動（優先台灣國語）', voiceTry: '試聽', voiceSample: '換發，4，2，第1發',
+      spSideOut: '換發', spServing: '{name}發球', spWins: '{name}獲勝，{a}比{b}', spServer: '{n}',
+      sVoiceName: '語音', voiceAuto: '自動（優先台灣國語）', voiceTry: '試聽', voiceSample: '換發，4，2，1',
       noTwVoice: '找不到台灣國語聲音，可能會用其他中文口音。請在裝置的語音設定下載「中文（台灣）」。'
     },
     en: {
