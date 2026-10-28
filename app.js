@@ -4,7 +4,7 @@
 
   var E = PickleEngine;
   var KEY = 'tps.v1';
-  var VERSION = '1.4.0'; // keep in sync with CACHE in sw.js
+  var VERSION = '1.4.1'; // keep in sync with CACHE in sw.js
 
   var I18N = {
     'zh-TW': {
