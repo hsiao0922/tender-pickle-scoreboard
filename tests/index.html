@@ -1,0 +1,11 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Engine tests</title>
+<pre id="out">running...</pre>
+<script src="../engine.js"></script>
+<script src="engine.test.js"></script>
+<script>
+  // Open in a browser, or: chrome --headless --dump-dom tests/index.html
+  var r = runAll();
+  document.getElementById('out').textContent = r.log.join('\n') + '\n\n' + (r.failed ? 'FAILED ' + r.failed : 'ALL PASSED ' + r.passed);
+</script>

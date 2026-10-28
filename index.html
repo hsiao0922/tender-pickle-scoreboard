@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="zh-TW">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0e170b">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Tender Pickle">
+  <meta name="description" content="Ad-free pickleball scoreboard with serve lights. 無廣告匹克球計分板，附發球燈號。">
+  <title>Tender Pickle Scoreboard</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main id="teams">
+    <section class="team" id="slot0" data-slot="0">
+      <input class="name" type="text" maxlength="20" autocomplete="off" autocapitalize="words" spellcheck="false">
+      <div class="scorewrap"><div class="score" aria-live="polite">0</div></div>
+      <div class="serve">
+        <div class="lamps" aria-hidden="true"><span class="lamp" data-n="1">1</span><span class="lamp" data-n="2">2</span></div>
+        <div class="serve-text"><div class="serve-info"></div><div class="court" aria-hidden="true"><i data-side="left"></i><i data-side="right"></i></div></div>
+      </div>
+      <button class="point" type="button"></button>
+    </section>
+
+    <section class="team" id="slot1" data-slot="1">
+      <input class="name" type="text" maxlength="20" autocomplete="off" autocapitalize="words" spellcheck="false">
+      <div class="scorewrap"><div class="score" aria-live="polite">0</div></div>
+      <div class="serve">
+        <div class="lamps" aria-hidden="true"><span class="lamp" data-n="1">1</span><span class="lamp" data-n="2">2</span></div>
+        <div class="serve-text"><div class="serve-info"></div><div class="court" aria-hidden="true"><i data-side="left"></i><i data-side="right"></i></div></div>
+      </div>
+      <button class="point" type="button"></button>
+    </section>
+  </main>
+
+  <div id="bar">
+    <div id="callout-box"><span data-i18n="callout"></span><b id="callout">0-0-2</b></div>
+    <div id="actions">
+      <button id="fault" type="button" data-i18n="fault"></button>
+      <button id="undo" type="button" data-i18n="undo"></button>
+      <button id="flip" type="button" data-i18n="flip"></button>
+      <button id="voice" type="button" aria-pressed="false"></button>
+      <button id="settings" type="button" data-i18n="settings"></button>
+      <button id="newgame" type="button"><span data-i18n="newGame"></span></button>
+    </div>
+  </div>
+  <footer>© 2026 Tender Pickle · 嫩肌匹克</footer>
+
+  <div id="over" hidden>
+    <div class="over-card" role="alertdialog" aria-labelledby="over-title">
+      <h2 id="over-title"></h2>
+      <p id="over-score"></p>
+      <div class="over-actions">
+        <button id="over-undo" type="button" data-i18n="undo"></button>
+        <button id="over-new" type="button" class="primary" data-i18n="newGameShort"></button>
+      </div>
+    </div>
+  </div>
+
+  <dialog id="dlg">
+    <form id="form" method="dialog">
+      <h2 data-i18n="sTitle"></h2>
+
+      <fieldset>
+        <legend data-i18n="sMode"></legend>
+        <label><input type="radio" name="mode" value="doubles"> <span data-i18n="doubles"></span></label>
+        <label><input type="radio" name="mode" value="singles"> <span data-i18n="singles"></span></label>
+      </fieldset>
+
+      <fieldset>
+        <legend data-i18n="sTarget"></legend>
+        <label><input type="radio" name="target" value="11"> 11</label>
+        <label><input type="radio" name="target" value="15"> 15</label>
+        <label><input type="radio" name="target" value="21"> 21</label>
+      </fieldset>
+
+      <label class="row"><input type="checkbox" name="winByTwo"> <span data-i18n="sWinBy2"></span></label>
+
+      <fieldset>
+        <legend data-i18n="sFirst"></legend>
+        <label><input type="radio" name="firstSlot" value="0"> <span data-i18n="leftSide"></span></label>
+        <label><input type="radio" name="firstSlot" value="1"> <span data-i18n="rightSide"></span></label>
+      </fieldset>
+
+      <fieldset>
+        <legend data-i18n="sLang"></legend>
+        <label><input type="radio" name="lang" value="zh-TW"> 繁體中文</label>
+        <label><input type="radio" name="lang" value="en"> English</label>
+      </fieldset>
+
+      <label class="row"><input type="checkbox" name="wake"> <span data-i18n="sWake"></span></label>
+
+      <div id="voice-rows">
+        <label class="row"><input type="checkbox" name="voice"> <span data-i18n="sVoice"></span></label>
+        <label class="row"><input type="checkbox" name="voiceTeam"> <span data-i18n="sVoiceTeam"></span></label>
+        <label class="row range"><span data-i18n="sRate"></span><input type="range" name="rate" min="0.7" max="1.4" step="0.1"></label>
+        <label class="row range"><span data-i18n="sVolume"></span><input type="range" name="volume" min="0.2" max="1" step="0.1"></label>
+      </div>
+
+      <p class="note" data-i18n="sNote"></p>
+      <div class="dlg-actions">
+        <button type="button" id="dlg-cancel" data-i18n="cancel"></button>
+        <button type="submit" class="primary" data-i18n="save"></button>
+      </div>
+      <p class="credit">Tender Pickle · 嫩肌匹克 · MIT</p>
+    </form>
+  </dialog>
+
+  <div id="toast" role="status" hidden></div>
+
+  <script src="engine.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

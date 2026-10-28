@@ -1,0 +1,16 @@
+{
+  "name": "Tender Pickle Scoreboard",
+  "short_name": "Pickle Score",
+  "description": "Ad-free pickleball scoreboard with serve lights. 無廣告匹克球計分板。",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#0e170b",
+  "theme_color": "#0e170b",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" },
+    { "src": "icons/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}
