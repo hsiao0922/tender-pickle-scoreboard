@@ -1,12 +1,22 @@
-/* Offline cache. Bump CACHE (and VERSION in app.js) when any file changes so clients pick up the update. */
-var CACHE = 'tender-pickle-v1.3.0';
+/*
+ * Offline cache, network-first: when online you always get the latest files,
+ * when offline (or the network is slower than TIMEOUT) the cached copy is used.
+ * Bump CACHE (and VERSION in app.js) when any file changes.
+ */
+var CACHE = 'tender-pickle-v1.4.0';
+var TIMEOUT = 4000;
 var FILES = [
   './', 'index.html', 'style.css', 'engine.js', 'app.js', 'manifest.json',
   'icons/icon.svg', 'icons/icon-192.png', 'icons/icon-512.png', 'icons/apple-touch-icon.png'
 ];
 
 self.addEventListener('install', function (e) {
-  e.waitUntil(caches.open(CACHE).then(function (c) { return c.addAll(FILES); }).then(function () { return self.skipWaiting(); }));
+  // cache:'reload' skips the browser HTTP cache so a new version never stores stale files
+  e.waitUntil(
+    caches.open(CACHE)
+      .then(function (c) { return Promise.all(FILES.map(function (f) { return c.add(new Request(f, { cache: 'reload' })); })); })
+      .then(function () { return self.skipWaiting(); })
+  );
 });
 
 self.addEventListener('activate', function (e) {
@@ -17,7 +27,34 @@ self.addEventListener('activate', function (e) {
   );
 });
 
+// no-cache = always revalidate with the server instead of trusting the browser HTTP cache
+function networkWithTimeout(url) {
+  return new Promise(function (resolve, reject) {
+    var timer = setTimeout(function () { reject(new Error('timeout')); }, TIMEOUT);
+    fetch(url, { cache: 'no-cache' }).then(function (res) { clearTimeout(timer); resolve(res); }, function (err) { clearTimeout(timer); reject(err); });
+  });
+}
+
 self.addEventListener('fetch', function (e) {
-  if (e.request.method !== 'GET') return;
-  e.respondWith(caches.match(e.request).then(function (hit) { return hit || fetch(e.request); }));
+  var req = e.request;
+  if (req.method !== 'GET') return;
+  var url = new URL(req.url);
+  if (url.origin !== location.origin) return;
+
+  e.respondWith(
+    networkWithTimeout(req.url).then(function (res) {
+      // keep the cache fresh; requests with a query string (e.g. the connection ping) are not stored
+      if (res && res.ok && !url.search) {
+        var copy = res.clone();
+        caches.open(CACHE).then(function (c) { c.put(req, copy); });
+      }
+      return res;
+    }).catch(function () {
+      // Offline: exact match for files; for page loads ignore the query string and fall back to the app shell.
+      if (req.mode === 'navigate') {
+        return caches.match(req, { ignoreSearch: true }).then(function (hit) { return hit || caches.match('index.html'); });
+      }
+      return caches.match(req).then(function (hit) { return hit || Response.error(); });
+    })
+  );
 });

@@ -71,7 +71,8 @@ style.css    layout and theme
 app.js       UI and state (localStorage)
 engine.js    pure rules engine (no DOM)
 tests/       open tests/index.html in a browser to run the rule tests
-sw.js        offline cache — bump CACHE in sw.js when you change files
+sw.js        offline cache, network-first (updates apply on the next launch while online)
+             — bump CACHE in sw.js and VERSION in app.js when you change files
 ```
 
 Run a local server (needed for the service worker):

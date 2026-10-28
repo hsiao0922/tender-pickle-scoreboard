@@ -4,7 +4,7 @@
 
   var E = PickleEngine;
   var KEY = 'tps.v1';
-  var VERSION = '1.3.0'; // keep in sync with CACHE in sw.js
+  var VERSION = '1.4.0'; // keep in sync with CACHE in sw.js
 
   var I18N = {
     'zh-TW': {
@@ -456,6 +456,17 @@
   ping();
   requestWake();
   if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) {
-    navigator.serviceWorker.register('sw.js').catch(function () { /* offline cache is optional */ });
+    // When a new version takes over, reload once so the open app is not stuck on old files.
+    // The game is saved in localStorage, so nothing is lost.
+    var hadController = !!navigator.serviceWorker.controller, reloading = false;
+    navigator.serviceWorker.addEventListener('controllerchange', function () {
+      if (hadController && !reloading) { reloading = true; location.reload(); }
+    });
+    navigator.serviceWorker.register('sw.js').then(function (reg) {
+      // iOS keeps home-screen apps alive in the background: look for updates whenever the app comes back.
+      document.addEventListener('visibilitychange', function () {
+        if (document.visibilityState === 'visible') reg.update().catch(function () { /* offline */ });
+      });
+    }).catch(function () { /* offline cache is optional */ });
   }
 })();
