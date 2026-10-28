@@ -257,6 +257,21 @@ dialog label { display: inline-flex; align-items: center; gap: .5em; min-height:
 dialog label.row { display: flex; margin-bottom: 12px; }
 dialog input[type="radio"], dialog input[type="checkbox"] { width: 1.3em; height: 1.3em; accent-color: var(--lamp); }
 dialog label.range { justify-content: space-between; gap: 1em; }
+dialog select {
+  flex: 1;
+  max-width: 220px;
+  min-height: 40px;
+  font: inherit;
+  color: var(--ink);
+  background: rgba(255, 246, 224, .12);
+  border: 2px solid var(--soft-line);
+  border-radius: 10px;
+  padding: 0 .5em;
+}
+dialog select option { color: #14210f; }
+.voice-try { margin: -4px 0 12px; }
+#voice-try { min-height: 40px; padding: 0 1em; border-radius: 10px; border: 2px solid var(--soft-line); background: var(--soft); font-weight: 800; }
+.note.warn { color: #FFD54F; opacity: 1; }
 dialog input[type="range"] { flex: 1; max-width: 220px; accent-color: var(--lamp); }
 .note { font-size: .85rem; opacity: .75; margin: 0 0 14px; }
 .dlg-actions { display: flex; justify-content: flex-end; gap: 10px; }

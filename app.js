@@ -20,7 +20,9 @@
       nameLabel: '隊名（可留空）',
       voiceOn: '語音報分：開', voiceOff: '語音報分：關', voiceTest: '語音報分已開啟',
       sVoice: '語音報分', sVoiceTeam: '報分前先講發球隊名稱', sRate: '語速', sVolume: '音量',
-      spSideOut: '換發', spServing: '{name}發球', spWins: '{name}獲勝，{a}比{b}', spServer: '第{n}發'
+      spSideOut: '換發', spServing: '{name}發球', spWins: '{name}獲勝，{a}比{b}', spServer: '第{n}發',
+      sVoiceName: '語音', voiceAuto: '自動（優先台灣國語）', voiceTry: '試聽', voiceSample: '換發，4，2，第1發',
+      noTwVoice: '找不到台灣國語聲音，可能會用其他中文口音。請在裝置的語音設定下載「中文（台灣）」。'
     },
     en: {
       left: 'Left Team', right: 'Right Team', leftSide: 'Left', rightSide: 'Right',
@@ -36,13 +38,15 @@
       nameLabel: 'Team name (optional)',
       voiceOn: 'Voice score: on', voiceOff: 'Voice score: off', voiceTest: 'Voice score is on',
       sVoice: 'Announce score by voice', sVoiceTeam: 'Say the serving team name first', sRate: 'Speed', sVolume: 'Volume',
-      spSideOut: 'Side out', spServing: '{name} serving', spWins: '{name} wins, {a} to {b}', spServer: '{n}'
+      spSideOut: 'Side out', spServing: '{name} serving', spWins: '{name} wins, {a} to {b}', spServer: '{n}',
+      sVoiceName: 'Voice', voiceAuto: 'Auto', voiceTry: 'Test voice', voiceSample: 'Side out, 4, 2, 1',
+      noTwVoice: 'No Taiwan Mandarin voice found; another Chinese voice may be used. Download "Chinese (Taiwan)" in your device voice settings.'
     }
   };
 
   var DEFAULTS = {
     mode: 'doubles', target: 11, winByTwo: true, firstSlot: 0, wake: true,
-    voice: false, voiceTeam: false, rate: 1, volume: 1,
+    voice: false, voiceTeam: false, voiceName: '', rate: 1, volume: 1,
     lang: /^zh/i.test(navigator.language || '') ? 'zh-TW' : 'en'
   };
 
@@ -269,6 +273,7 @@
     form.voiceTeam.checked = s.voiceTeam;
     form.rate.value = String(s.rate);
     form.volume.value = String(s.volume);
+    if (canSpeak) populateVoices(s.lang, s.voiceName);
     dlg.showModal();
   }
   $('settings').addEventListener('click', openSettings);
@@ -286,7 +291,8 @@
       voice: form.voice.checked,
       voiceTeam: form.voiceTeam.checked,
       rate: Number(form.rate.value),
-      volume: Number(form.volume.value)
+      volume: Number(form.volume.value),
+      voiceName: form.voiceName.value
     };
     var rulesChanged = next.mode !== s.mode || next.target !== s.target ||
       next.winByTwo !== s.winByTwo || next.firstSlot !== s.firstSlot;
@@ -326,21 +332,75 @@
   /* ---------- voice score (Web Speech API) ---------- */
   var canSpeak = 'speechSynthesis' in window && typeof SpeechSynthesisUtterance !== 'undefined';
 
-  function speak(text) {
+  function voiceLang(setting) { return setting === 'zh-TW' ? 'zh-TW' : 'en-US'; }
+  function normLang(v) { return v.lang.replace('_', '-').toLowerCase(); }
+
+  // Chosen voice by name, else an exact zh-TW / en-US match, else any voice of the same language.
+  function pickVoice(lang, name) {
+    var voices = speechSynthesis.getVoices();
+    if (name) {
+      var named = voices.filter(function (x) { return x.name === name; })[0];
+      if (named) return named;
+    }
+    var want = lang.toLowerCase();
+    return voices.filter(function (x) { return normLang(x) === want; })[0] ||
+           voices.filter(function (x) { return normLang(x).indexOf(want.slice(0, 2)) === 0; })[0];
+  }
+
+  // o: optional overrides { lang, voiceName, rate, volume } (used by the settings test button)
+  function speak(text, o) {
     if (!canSpeak || !text) return;
-    var lang = state.settings.lang === 'zh-TW' ? 'zh-TW' : 'en-US';
+    o = o || {};
+    var s = state.settings;
+    var lang = voiceLang(o.lang || s.lang);
     var u = new SpeechSynthesisUtterance(text);
     u.lang = lang;
-    u.rate = state.settings.rate;
-    u.volume = state.settings.volume;
-    var voices = speechSynthesis.getVoices();
-    var want = lang.toLowerCase();
-    var v = voices.filter(function (x) { return x.lang.replace('_', '-').toLowerCase() === want; })[0] ||
-            voices.filter(function (x) { return x.lang.toLowerCase().indexOf(want.slice(0, 2)) === 0; })[0];
+    u.rate = o.rate != null ? o.rate : s.rate;
+    u.volume = o.volume != null ? o.volume : s.volume;
+    var v = pickVoice(lang, o.voiceName != null ? o.voiceName : s.voiceName);
     if (v) u.voice = v;
     speechSynthesis.cancel();
     speechSynthesis.speak(u);
   }
+
+  // Fill the voice <select> with this device's voices for the chosen language.
+  function populateVoices(langSetting, selected) {
+    var sel = form.voiceName, lang = voiceLang(langSetting), want = lang.toLowerCase();
+    var voices = speechSynthesis.getVoices().filter(function (x) { return normLang(x).indexOf(want.slice(0, 2)) === 0; });
+    voices.sort(function (a, b) {
+      return (normLang(a) === want ? 0 : 1) - (normLang(b) === want ? 0 : 1) || a.name.localeCompare(b.name);
+    });
+    sel.innerHTML = '';
+    var auto = document.createElement('option');
+    auto.value = '';
+    auto.textContent = I18N[langSetting].voiceAuto;
+    sel.appendChild(auto);
+    voices.forEach(function (v) {
+      var opt = document.createElement('option');
+      opt.value = v.name;
+      opt.textContent = v.name + ' (' + v.lang + ')';
+      sel.appendChild(opt);
+    });
+    sel.value = voices.some(function (v) { return v.name === selected; }) ? selected : '';
+    var hasTw = voices.some(function (v) { return normLang(v) === want; });
+    $('voice-warn').hidden = !(lang === 'zh-TW' && voices.length > 0 && !hasTw);
+  }
+  if (canSpeak && speechSynthesis.addEventListener) {
+    speechSynthesis.addEventListener('voiceschanged', function () {
+      if (dlg.open) populateVoices(form.lang.value, form.voiceName.value);
+    });
+  }
+  form.addEventListener('change', function (e) {
+    if (canSpeak && e.target.name === 'lang') populateVoices(e.target.value, '');
+  });
+  $('voice-try').addEventListener('click', function () {
+    speak(I18N[form.lang.value].voiceSample, {
+      lang: form.lang.value,
+      voiceName: form.voiceName.value,
+      rate: Number(form.rate.value),
+      volume: Number(form.volume.value)
+    });
+  });
 
   // Speak the new score after a point or fault. `prev` is the state before the action.
   function announce(prev) {

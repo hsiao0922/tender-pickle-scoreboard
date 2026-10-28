@@ -1,5 +1,5 @@
 /* Offline cache. Bump CACHE when any file changes so clients pick up the update. */
-var CACHE = 'tender-pickle-v1.1.0';
+var CACHE = 'tender-pickle-v1.2.0';
 var FILES = [
   './', 'index.html', 'style.css', 'engine.js', 'app.js', 'manifest.json',
   'icons/icon.svg', 'icons/icon-192.png', 'icons/icon-512.png', 'icons/apple-touch-icon.png'
