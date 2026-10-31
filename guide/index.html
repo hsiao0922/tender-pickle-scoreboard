@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="zh-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>嫩肌匹克計分板 使用說明</title>
+<style>
+:root{--bg:#0e170b;--card:#16231110;--panel:#162311;--line:#2f4524;--fg:#f1f5e4;--mute:#a9b99a;--lime:#c8ff00;--pink:#ff3d7f}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.75 "Noto Sans TC","Microsoft JhengHei",system-ui,sans-serif}
+.wrap{max-width:860px;margin:0 auto;padding:24px 16px 64px}
+header{text-align:center;padding:24px 0 8px}
+header img{width:96px;height:96px;border-radius:22px}
+h1{font-size:28px;margin:12px 0 4px}
+h2{font-size:22px;margin:48px 0 12px;padding-bottom:6px;border-bottom:2px solid var(--line);color:var(--lime)}
+h3{font-size:18px;margin:28px 0 8px}
+p{margin:8px 0}
+.sub{color:var(--mute)}
+a{color:var(--lime)}
+.cta{display:inline-block;margin:16px 0;padding:12px 22px;border-radius:999px;background:var(--lime);color:#12200c;font-weight:700;text-decoration:none}
+nav{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:12px 0}
+nav a{padding:4px 12px;border:1px solid var(--line);border-radius:999px;text-decoration:none;font-size:14px;color:var(--fg)}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 18px;margin:14px 0}
+.tip{border-left:4px solid var(--lime)}
+.warn{border-left:4px solid var(--pink)}
+figure{margin:16px 0;text-align:center}
+figure img{max-width:100%;height:auto;border-radius:18px;border:1px solid var(--line)}
+figcaption{color:var(--mute);font-size:14px;margin-top:6px}
+.shots{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px}
+.two{display:grid;grid-template-columns:minmax(0,320px) 1fr;gap:24px;align-items:start}
+@media(max-width:640px){.two{grid-template-columns:1fr}}
+table{border-collapse:collapse;width:100%;margin:12px 0;font-size:15px}
+th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+th{background:#1d2f16}
+code,kbd{background:#223319;border-radius:6px;padding:1px 7px;font-family:ui-monospace,Consolas,monospace;font-size:.92em}
+ol,ul{padding-left:1.3em}
+li{margin:4px 0}
+.num{display:inline-block;min-width:24px;height:24px;line-height:24px;border-radius:50%;background:var(--pink);color:#fff;text-align:center;font-size:14px;font-weight:700;margin-right:6px}
+svg{width:100%;height:auto;background:#0b1208;border:1px solid var(--line);border-radius:14px}
+.call{font:700 22px ui-monospace,Consolas,monospace;color:var(--lime)}
+details{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:8px 16px;margin:8px 0}
+summary{cursor:pointer;font-weight:700}
+footer{text-align:center;color:var(--mute);font-size:14px;margin-top:48px}
+@media print{body{background:#fff;color:#000}.panel,details{background:#fff}h2{color:#000}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <img src="img/icon.png" alt="嫩肌匹克計分板圖示">
+  <h1>嫩肌匹克計分板 使用說明</h1>
+  <p class="sub">Tender Pickle Scoreboard · v1.4.1 · 無廣告、免註冊、可離線的匹克球計分板</p>
+  <a class="cta" href="https://hsiao0922.github.io/tender-pickle-scoreboard/">開啟計分板</a>
+  <nav>
+    <a href="#features">特色</a><a href="#install">安裝到桌面</a><a href="#ui">畫面導覽</a><a href="#play">怎麼計分</a>
+    <a href="#rules">規則</a><a href="#settings">設定</a><a href="#voice">語音報分</a><a href="#faq">常見問題</a>
+  </nav>
+</header>
+
+<h2 id="features">這是什麼？</h2>
+<p>專為匹克球設計的計分板，最大的特色是用<strong>燈號</strong>顯示現在是第 1 發還是第 2 發，再也不會忘記誰該發球、該站哪一區。</p>
+<ul>
+  <li><strong>發球燈號</strong>：每隊兩個燈，亮的就是目前的發球員。</li>
+  <li><strong>發球區提示</strong>：依發球隊分數自動顯示該在右區或左區發球。</li>
+  <li><strong>自動報分</strong>：雙打自動產生如 <code>4-2-1</code> 的三段報分。</li>
+  <li><strong>防誤按</strong>：只有發球方能按得分，接發方按鈕鎖住；新局要長按才會重置。</li>
+  <li><strong>語音報分</strong>、<strong>復原</strong>、<strong>換邊</strong>、單打／雙打、11／15／21 分、是否領先 2 分。</li>
+  <li><strong>可安裝、可離線</strong>：加到手機桌面後像一般 App，沒有網路也能用，螢幕可保持恆亮。</li>
+  <li><strong>隱私</strong>：沒有帳號、沒有追蹤、沒有廣告，比賽資料只存在你自己的瀏覽器。</li>
+</ul>
+
+<h2 id="install">安裝到桌面（iPhone / Android / 電腦）</h2>
+<p>網址：<a href="https://hsiao0922.github.io/tender-pickle-scoreboard/">https://hsiao0922.github.io/tender-pickle-scoreboard/</a></p>
+<div class="panel tip">第一次安裝需要連網；安裝後即使沒有網路也能開啟使用。不需要 App Store 或 Google Play，也不需要註冊。</div>
+
+<h3>🍎 iPhone / iPad（Safari）</h3>
+<svg viewBox="0 0 800 410" role="img" aria-label="iPhone 安裝步驟" font-family="'Noto Sans TC','Microsoft JhengHei',system-ui,sans-serif"><g transform="translate(10,10)">
+<rect width="180" height="360" rx="24" fill="#111" stroke="#666" stroke-width="3"/>
+<rect x="8" y="8" width="164" height="344" rx="17" fill="#1b2616"/>
+<rect x="20" y="24" width="140" height="100" rx="10" fill="#2d5a1c"/><rect x="20" y="130" width="140" height="100" rx="10" fill="#7a2850"/><text x="90" y="90" font-size="34" fill="#fff6e0" text-anchor="middle" font-weight="700">4</text><text x="90" y="196" font-size="34" fill="#e0dcc8" text-anchor="middle" font-weight="700">2</text><rect x="14" y="314" width="152" height="30" rx="15" fill="#2a2a2a"/><text x="90" y="333" font-size="10" fill="#ddd" text-anchor="middle" font-weight="400">hsiao0922.github.io</text><g transform="translate(82,258)" stroke="#fff" fill="none" stroke-width="2"><path d="M0 8v12h16V8M8 18V2M3 7l5-5 5 5"/></g><rect x="66" y="250" width="48" height="34" rx="10" fill="none" stroke="#ff3d7f" stroke-width="3" stroke-dasharray="6 3"/>
+<circle cx="14" cy="-2" r="14" fill="#ff3d7f"/><text x="14" y="3" text-anchor="middle" fill="#fff" font-size="15" font-weight="700">1</text>
+<text x="90" y="392" text-anchor="middle" fill="#e8f0d8" font-size="13">用 Safari 開啟網址</text>
+</g><g transform="translate(210,10)">
+<rect width="180" height="360" rx="24" fill="#111" stroke="#666" stroke-width="3"/>
+<rect x="8" y="8" width="164" height="344" rx="17" fill="#1b2616"/>
+<rect x="14" y="30" width="152" height="20" rx="6" fill="#222"/><text x="24" y="44" font-size="9" fill="#ccc" text-anchor="start" font-weight="400">Tender Pickle Scoreboard</text><rect x="14" y="200" width="152" height="140" rx="12" fill="#2b2b2b"/><text x="24" y="222" font-size="11" fill="#ddd" text-anchor="start" font-weight="400">拷貝</text><text x="24" y="246" font-size="11" fill="#ddd" text-anchor="start" font-weight="400">加入書籤</text><text x="24" y="270" font-size="11" fill="#ddd" text-anchor="start" font-weight="400">加入我的最愛</text><rect x="18" y="284" width="144" height="26" rx="6" fill="#3a4a2a"/><text x="24" y="302" font-size="12" fill="#fff" text-anchor="start" font-weight="700">加入主畫面</text><text x="150" y="302" font-size="14" fill="#fff" text-anchor="end">＋</text><rect x="14" y="280" width="152" height="34" rx="8" fill="none" stroke="#ff3d7f" stroke-width="3" stroke-dasharray="6 3"/>
+<circle cx="14" cy="-2" r="14" fill="#ff3d7f"/><text x="14" y="3" text-anchor="middle" fill="#fff" font-size="15" font-weight="700">2</text>
+<text x="90" y="392" text-anchor="middle" fill="#e8f0d8" font-size="13">點「分享」→「加入主畫面」</text>
+</g><g transform="translate(410,10)">
+<rect width="180" height="360" rx="24" fill="#111" stroke="#666" stroke-width="3"/>
+<rect x="8" y="8" width="164" height="344" rx="17" fill="#1b2616"/>
+<rect x="14" y="40" width="152" height="230" rx="14" fill="#2b2b2b"/><text x="26" y="62" font-size="11" fill="#7ab8ff" text-anchor="start" font-weight="400">取消</text><text x="90" y="62" font-size="11" fill="#fff" text-anchor="middle" font-weight="700">加入主畫面</text><text x="154" y="62" font-size="12" fill="#7ab8ff" text-anchor="end" font-weight="700">加入</text><image href="img/icon.png" x="24" y="84" width="44" height="44" style="clip-path:inset(0 round 9.68px)"/><rect x="76" y="88" width="80" height="16" rx="4" fill="#444"/><text x="80" y="100" font-size="10" fill="#fff" text-anchor="start" font-weight="400">Pickle Score</text><text x="76" y="126" font-size="8" fill="#999" text-anchor="start" font-weight="400">hsiao0922.github.io</text><text x="24" y="170" font-size="9" fill="#aaa" text-anchor="start" font-weight="400">將會在主畫面新增一個</text><text x="24" y="184" font-size="9" fill="#aaa" text-anchor="start" font-weight="400">全螢幕的計分 App 圖示。</text><rect x="124" y="48" width="34" height="22" rx="6" fill="none" stroke="#ff3d7f" stroke-width="3" stroke-dasharray="6 3"/>
+<circle cx="14" cy="-2" r="14" fill="#ff3d7f"/><text x="14" y="3" text-anchor="middle" fill="#fff" font-size="15" font-weight="700">3</text>
+<text x="90" y="392" text-anchor="middle" fill="#e8f0d8" font-size="13">按右上「加入」</text>
+</g><g transform="translate(610,10)">
+<rect width="180" height="360" rx="24" fill="#111" stroke="#666" stroke-width="3"/>
+<rect x="8" y="8" width="164" height="344" rx="17" fill="#1b2616"/>
+<rect x="22" y="40" width="30" height="30" rx="8" fill="#3a4636"/><rect x="58" y="40" width="30" height="30" rx="8" fill="#3a4636"/><rect x="94" y="40" width="30" height="30" rx="8" fill="#3a4636"/><rect x="130" y="40" width="30" height="30" rx="8" fill="#3a4636"/><rect x="22" y="96" width="30" height="30" rx="8" fill="#3a4636"/><rect x="58" y="96" width="30" height="30" rx="8" fill="#3a4636"/><rect x="130" y="96" width="30" height="30" rx="8" fill="#3a4636"/><rect x="22" y="152" width="30" height="30" rx="8" fill="#3a4636"/><rect x="58" y="152" width="30" height="30" rx="8" fill="#3a4636"/><rect x="94" y="152" width="30" height="30" rx="8" fill="#3a4636"/><rect x="130" y="152" width="30" height="30" rx="8" fill="#3a4636"/><rect x="22" y="208" width="30" height="30" rx="8" fill="#3a4636"/><rect x="58" y="208" width="30" height="30" rx="8" fill="#3a4636"/><rect x="94" y="208" width="30" height="30" rx="8" fill="#3a4636"/><rect x="130" y="208" width="30" height="30" rx="8" fill="#3a4636"/><image href="img/icon.png" x="92" y="94" width="34" height="34" style="clip-path:inset(0 round 7.48px)"/><text x="107" y="142" font-size="7" fill="#fff" text-anchor="middle" font-weight="400">Pickle Score</text><rect x="86" y="88" width="46" height="62" rx="10" fill="none" stroke="#ff3d7f" stroke-width="3" stroke-dasharray="6 3"/>
+<circle cx="14" cy="-2" r="14" fill="#ff3d7f"/><text x="14" y="3" text-anchor="middle" fill="#fff" font-size="15" font-weight="700">4</text>
+<text x="90" y="392" text-anchor="middle" fill="#e8f0d8" font-size="13">主畫面出現 App 圖示</text>
+</g></svg>
+<ol>
+  <li>用 <strong>Safari</strong> 開啟上面的網址。</li>
+  <li>點下方的<strong>分享</strong>按鈕（方框加向上箭頭）。若是 iOS 26，分享可能收在網址列旁的「⋯」選單裡。</li>
+  <li>往下滑，選擇<strong>「加入主畫面」</strong>。</li>
+  <li>名稱可保留或自行修改，按右上角<strong>「加入」</strong>。</li>
+  <li>回到主畫面，點新出現的圖示就會<strong>全螢幕</strong>開啟，沒有網址列。</li>
+</ol>
+<div class="panel tip">建議使用 <strong>iOS 16.4 以上</strong>，「螢幕恆亮」功能才能正常運作。若找不到「加入主畫面」，請確認不是在 LINE、Facebook 等 App 內建瀏覽器中開啟，請改用 Safari。</div>
+
+<h3>🤖 Android（Chrome）</h3>
+<svg viewBox="0 0 800 410" role="img" aria-label="Android 安裝步驟" font-family="'Noto Sans TC','Microsoft JhengHei',system-ui,sans-serif"><g transform="translate(10,10)">
+<rect width="180" height="360" rx="24" fill="#111" stroke="#666" stroke-width="3"/>
+<rect x="8" y="8" width="164" height="344" rx="17" fill="#1b2616"/>
+<rect x="8" y="8" width="164" height="34" rx="0" fill="#262c22"/><rect x="16" y="15" width="118" height="20" rx="10" fill="#3a4034"/><text x="24" y="29" font-size="9" fill="#ddd" text-anchor="start" font-weight="400">hsiao0922.github.io</text><g fill="#fff"><circle cx="154" cy="17" r="2"/><circle cx="154" cy="25" r="2"/><circle cx="154" cy="33" r="2"/></g><rect x="142" y="10" width="24" height="30" rx="8" fill="none" stroke="#ff3d7f" stroke-width="3" stroke-dasharray="6 3"/><rect x="20" y="60" width="140" height="100" rx="10" fill="#2d5a1c"/><rect x="20" y="166" width="140" height="100" rx="10" fill="#7a2850"/><text x="90" y="125" font-size="34" fill="#fff6e0" text-anchor="middle" font-weight="700">4</text><text x="90" y="230" font-size="34" fill="#e0dcc8" text-anchor="middle" font-weight="700">2</text>
+<circle cx="14" cy="-2" r="14" fill="#ff3d7f"/><text x="14" y="3" text-anchor="middle" fill="#fff" font-size="15" font-weight="700">1</text>
+<text x="90" y="392" text-anchor="middle" fill="#e8f0d8" font-size="13">用 Chrome 開啟，點右上 ⋮</text>
+</g><g transform="translate(210,10)">
+<rect width="180" height="360" rx="24" fill="#111" stroke="#666" stroke-width="3"/>
+<rect x="8" y="8" width="164" height="344" rx="17" fill="#1b2616"/>
+<rect x="60" y="22" width="108" height="170" rx="10" fill="#2e342a"/><text x="70" y="44" font-size="11" fill="#ddd" text-anchor="start" font-weight="400">新分頁</text><text x="70" y="68" font-size="11" fill="#ddd" text-anchor="start" font-weight="400">歷史記錄</text><text x="70" y="92" font-size="11" fill="#ddd" text-anchor="start" font-weight="400">下載</text><text x="70" y="116" font-size="11" fill="#ddd" text-anchor="start" font-weight="400">書籤</text><rect x="64" y="140" width="100" height="26" rx="6" fill="#3a4a2a"/><text x="70" y="157" font-size="11" fill="#fff" text-anchor="start" font-weight="700">安裝應用程式</text><rect x="60" y="136" width="108" height="34" rx="8" fill="none" stroke="#ff3d7f" stroke-width="3" stroke-dasharray="6 3"/><g fill="#fff"><circle cx="154" cy="17" r="2"/><circle cx="154" cy="25" r="2"/><circle cx="154" cy="33" r="2"/></g>
+<circle cx="14" cy="-2" r="14" fill="#ff3d7f"/><text x="14" y="3" text-anchor="middle" fill="#fff" font-size="15" font-weight="700">2</text>
+<text x="90" y="392" text-anchor="middle" fill="#e8f0d8" font-size="13">選「安裝應用程式」</text>
+</g><g transform="translate(410,10)">
+<rect width="180" height="360" rx="24" fill="#111" stroke="#666" stroke-width="3"/>
+<rect x="8" y="8" width="164" height="344" rx="17" fill="#1b2616"/>
+<rect x="14" y="100" width="152" height="150" rx="16" fill="#2e342a"/><text x="26" y="128" font-size="13" fill="#fff" text-anchor="start" font-weight="700">安裝應用程式？</text><image href="img/icon.png" x="26" y="142" width="36" height="36" style="clip-path:inset(0 round 7.92px)"/><text x="70" y="158" font-size="11" fill="#fff" text-anchor="start" font-weight="400">Pickle Score</text><text x="70" y="172" font-size="8" fill="#999" text-anchor="start" font-weight="400">hsiao0922.github.io</text><text x="84" y="232" font-size="11" fill="#9ad07a" text-anchor="middle" font-weight="400">取消</text><rect x="112" y="214" width="46" height="26" rx="13" fill="#9ad07a"/><text x="135" y="232" font-size="12" fill="#12200c" text-anchor="middle" font-weight="700">安裝</text><rect x="108" y="210" width="54" height="34" rx="17" fill="none" stroke="#ff3d7f" stroke-width="3" stroke-dasharray="6 3"/>
+<circle cx="14" cy="-2" r="14" fill="#ff3d7f"/><text x="14" y="3" text-anchor="middle" fill="#fff" font-size="15" font-weight="700">3</text>
+<text x="90" y="392" text-anchor="middle" fill="#e8f0d8" font-size="13">按「安裝」</text>
+</g><g transform="translate(610,10)">
+<rect width="180" height="360" rx="24" fill="#111" stroke="#666" stroke-width="3"/>
+<rect x="8" y="8" width="164" height="344" rx="17" fill="#1b2616"/>
+<rect x="22" y="40" width="30" height="30" rx="8" fill="#3a4636"/><rect x="58" y="40" width="30" height="30" rx="8" fill="#3a4636"/><rect x="94" y="40" width="30" height="30" rx="8" fill="#3a4636"/><rect x="130" y="40" width="30" height="30" rx="8" fill="#3a4636"/><rect x="22" y="96" width="30" height="30" rx="8" fill="#3a4636"/><rect x="58" y="96" width="30" height="30" rx="8" fill="#3a4636"/><rect x="130" y="96" width="30" height="30" rx="8" fill="#3a4636"/><rect x="22" y="152" width="30" height="30" rx="8" fill="#3a4636"/><rect x="58" y="152" width="30" height="30" rx="8" fill="#3a4636"/><rect x="94" y="152" width="30" height="30" rx="8" fill="#3a4636"/><rect x="130" y="152" width="30" height="30" rx="8" fill="#3a4636"/><rect x="22" y="208" width="30" height="30" rx="8" fill="#3a4636"/><rect x="58" y="208" width="30" height="30" rx="8" fill="#3a4636"/><rect x="94" y="208" width="30" height="30" rx="8" fill="#3a4636"/><rect x="130" y="208" width="30" height="30" rx="8" fill="#3a4636"/><image href="img/icon.png" x="92" y="94" width="34" height="34" style="clip-path:inset(0 round 7.48px)"/><text x="107" y="142" font-size="7" fill="#fff" text-anchor="middle" font-weight="400">Pickle Score</text><rect x="86" y="88" width="46" height="62" rx="10" fill="none" stroke="#ff3d7f" stroke-width="3" stroke-dasharray="6 3"/>
+<circle cx="14" cy="-2" r="14" fill="#ff3d7f"/><text x="14" y="3" text-anchor="middle" fill="#fff" font-size="15" font-weight="700">4</text>
+<text x="90" y="392" text-anchor="middle" fill="#e8f0d8" font-size="13">桌面出現 App 圖示</text>
+</g></svg>
+<ol>
+  <li>用 <strong>Chrome</strong> 開啟上面的網址。</li>
+  <li>點右上角<strong>「⋮」</strong>選單。</li>
+  <li>選擇<strong>「安裝應用程式」</strong>（部分手機顯示為「加到主畫面」）。</li>
+  <li>在跳出的視窗按<strong>「安裝」</strong>。</li>
+  <li>桌面或應用程式列表會出現圖示，點開即可。</li>
+</ol>
+
+<h3>💻 電腦（Chrome / Edge）</h3>
+<p>開啟網址後，點網址列右側的<strong>安裝圖示</strong>（螢幕加下箭頭），或選單 →「安裝 Tender Pickle Scoreboard」。</p>
+
+<div class="panel warn">
+  <strong>注意：</strong>比賽資料存在各自的瀏覽器中。iPhone 上「Safari 分頁」和「主畫面 App」的資料是分開的，所以請固定用同一個方式開啟；清除瀏覽器網站資料會讓目前比分歸零。
+</div>
+
+<h2 id="ui">畫面導覽</h2>
+<div class="two">
+  <figure>
+    <img src="img/annotated.png" alt="計分板畫面標註圖">
+    <figcaption>手機直向畫面（範例：嫩肌 4 : 2 辣椒，嫩肌第 1 發）</figcaption>
+  </figure>
+  <div>
+    <p><span class="num">1</span><strong>隊名</strong>：點一下可輸入，留空則顯示「左邊隊伍／右邊隊伍」。</p>
+    <p><span class="num">2</span><strong>比分</strong>：該隊目前得分。</p>
+    <p><span class="num">3</span><strong>發球燈號</strong>：亮起的是目前發球員（第 1 發或第 2 發）。</p>
+    <p><span class="num">4</span><strong>發球區</strong>：<code>左</code>／<code>右</code> 亮起處就是應站的發球區（隊分偶數右區、奇數左區）。</p>
+    <p><span class="num">5</span><strong>+1 得分</strong>：發球方贏得這一球時按。外框螢光綠的就是發球方。</p>
+    <p><span class="num">6</span><strong>接發方</strong>：按鈕鎖定，不能誤加分。</p>
+    <p><span class="num">7</span><strong>報分</strong>：照這組數字唱分，如 <span class="call">4-2-1</span>。</p>
+    <p><span class="num">8</span><strong>連線燈</strong>：綠色＝有網路，紅色＝離線（仍可正常使用）。</p>
+    <p><span class="num">9</span><strong>發球方失誤</strong>：發球方輸掉這一球時按。</p>
+    <p><span class="num">10</span><strong>復原</strong>：回上一步，按錯時使用。</p>
+    <p><span class="num">11</span><strong>換邊</strong>：交換左右隊伍位置（與場上換邊同步）。</p>
+    <p><span class="num">12</span><strong>喇叭</strong>：開關語音報分。</p>
+    <p><span class="num">13</span><strong>設定</strong>：賽制、分數、語言、語音等。</p>
+    <p><span class="num">14</span><strong>長按新局</strong>：按住約 0.7 秒才會清空比分重新開始。</p>
+  </div>
+</div>
+<p>手機橫放、平板與電腦也能使用，版面會自動調整。</p>
+
+<h2 id="play">怎麼計分（雙打範例）</h2>
+<p>採傳統<strong>換發制（Side-out）</strong>：只有發球方能得分。下面是一段實際流程：</p>
+<table>
+  <tr><th>步驟</th><th>操作</th><th>報分</th><th>說明</th></tr>
+  <tr><td>開局</td><td>—</td><td><span class="call">0-0-2</span></td><td>先發球隊只有一個發球員，所以是「第 2 發」</td></tr>
+  <tr><td>1</td><td>左隊按 <code>+1 得分</code></td><td><span class="call">1-0-2</span></td><td>發球隊得 1 分，換到左區發球</td></tr>
+  <tr><td>2</td><td>左隊發球失誤</td><td><span class="call">0-1-1</span></td><td>第 2 發失誤 → 換發，右隊從第 1 發開始</td></tr>
+  <tr><td>3</td><td>右隊按 <code>+1 得分</code></td><td><span class="call">1-1-1</span></td><td>右隊得分</td></tr>
+  <tr><td>4</td><td>右隊發球失誤</td><td><span class="call">1-1-2</span></td><td>第 1 發失誤 → 換同隊夥伴發球（第 2 發）</td></tr>
+  <tr><td>5</td><td>右隊再失誤</td><td><span class="call">1-1-1</span></td><td>第 2 發失誤 → 換發給左隊，從第 1 發開始</td></tr>
+</table>
+<div class="shots">
+  <figure><img src="img/start.png" alt="開局畫面"><figcaption>開局 <code>0-0-2</code></figcaption></figure>
+  <figure><img src="img/sideout.png" alt="換發後畫面"><figcaption>換發後，發球權到另一隊</figcaption></figure>
+  <figure><img src="img/win.png" alt="獲勝畫面"><figcaption>達標獲勝：可復原或開新局</figcaption></figure>
+</div>
+<p><strong>按錯了？</strong>隨時按「復原」。<strong>比賽結束</strong>：達到目標分數（預設 11 分且領先 2 分）會跳出獲勝視窗，按「新局」繼續。</p>
+
+<h3>單打</h3>
+<p>在設定中切換為單打：只報兩個數字（如 <code>4-2</code>），沒有第幾發，發球區規則相同（自己分數偶數站右、奇數站左）。</p>
+
+<h2 id="rules">採用的規則</h2>
+<ol>
+  <li>只有發球方得分。</li>
+  <li>雙打報分三個數字：<code>發球方分數 – 接發方分數 – 發球員編號(1 或 2)</code>。</li>
+  <li>每局先發球隊從 <code>0-0-2</code> 開始，只有一位發球員，第一次失誤直接換發。</li>
+  <li>第 1 發失誤 → 換夥伴發球；第 2 發失誤 → 換發，對方從第 1 發開始。</li>
+  <li>發球隊分數偶數 → 右區發球；奇數 → 左區發球。</li>
+  <li>達目標分數並領先 2 分獲勝（可在設定關閉「需領先 2 分」）。</li>
+</ol>
+<p class="sub">目前尚未支援 Rally 計分（每球得分制）。</p>
+
+<h2 id="settings">設定說明</h2>
+<div class="two">
+  <figure><img src="img/settings.png" alt="設定畫面"><figcaption>按「設定」開啟</figcaption></figure>
+  <div>
+    <table>
+      <tr><th>項目</th><th>說明</th></tr>
+      <tr><td>賽制</td><td>雙打／單打</td></tr>
+      <tr><td>目標分數</td><td>11、15 或 21</td></tr>
+      <tr><td>需領先 2 分</td><td>勾選＝達標後還要贏對方 2 分</td></tr>
+      <tr><td>先發球</td><td>開局由左邊或右邊隊伍先發</td></tr>
+      <tr><td>語言</td><td>繁體中文／English</td></tr>
+      <tr><td>保持螢幕恆亮</td><td>比賽中螢幕不會自動關閉</td></tr>
+      <tr><td>語音相關</td><td>見下一節</td></tr>
+    </table>
+    <div class="panel warn">變更賽制、目標分數或先發球會<strong>重新開始新局</strong>，目前比分會清除（會先詢問確認）。</div>
+  </div>
+</div>
+
+<h2 id="voice">語音報分</h2>
+<ol>
+  <li>點下方<strong>喇叭</strong>按鈕開啟（預設關閉），或到設定勾選「語音報分」。</li>
+  <li>每一球後會唸出數字，例如「4，2，1」；換發時唸「換發」；比賽結束宣布獲勝者。</li>
+  <li>可勾選「報分前先講發球隊名稱」，並調整<strong>語音</strong>、<strong>語速</strong>、<strong>音量</strong>，按「試聽」確認聲音。</li>
+</ol>
+<div class="panel tip">預設優先使用台灣國語聲音。若提示找不到，請到手機的語音設定下載「中文（台灣）」語音。第一次需要先點一下畫面，瀏覽器才允許發聲。</div>
+
+<h2 id="kbd">電腦快捷鍵</h2>
+<table>
+  <tr><th>動作</th><th>按鍵</th></tr>
+  <tr><td>左邊隊伍得分</td><td><kbd>←</kbd></td></tr>
+  <tr><td>右邊隊伍得分</td><td><kbd>→</kbd></td></tr>
+  <tr><td>發球方失誤</td><td><kbd>Space</kbd></td></tr>
+  <tr><td>復原</td><td><kbd>Z</kbd></td></tr>
+  <tr><td>換邊</td><td><kbd>F</kbd></td></tr>
+  <tr><td>新局</td><td>點「新局」按鈕後確認</td></tr>
+</table>
+<figure><img src="img/landscape.png" alt="橫向畫面" style="max-width:640px"><figcaption>橫放畫面，適合立在場邊給大家看</figcaption></figure>
+
+<h2 id="faq">常見問題</h2>
+<details><summary>沒有網路可以用嗎？</summary><p>可以。第一次連網開啟後，之後離線也能計分。右上連線燈變紅只是表示離線，不影響使用。</p></details>
+<details><summary>比賽資料會上傳或遺失嗎？</summary><p>不會上傳，只存在本機瀏覽器的 localStorage。清除網站資料、換手機或換瀏覽器就不會有舊資料。</p></details>
+<details><summary>更新後畫面沒有變？</summary><p>程式採用「有網路時優先更新」，下次開啟（有連網）就會套用新版。頁尾和設定底部會顯示目前版本號。</p></details>
+<details><summary>iPhone 找不到「加入主畫面」？</summary><p>請確認用 Safari 開啟（不是 LINE／FB 內建瀏覽器）。若畫面上看不到分享按鈕，請在網址列旁的「⋯」選單中尋找「分享」。</p></details>
+<details><summary>Android 沒有「安裝應用程式」？</summary><p>請用 Chrome 並先把網頁完整載入一次；仍沒有時，選單內的「加到主畫面」也可以達到相同效果。</p></details>
+<details><summary>語音沒有聲音？</summary><p>檢查手機是否靜音、音量與計分板內的音量；先點一下畫面；再按設定中的「試聽」測試。</p></details>
+<details><summary>怎麼移除？</summary><p>像一般 App 一樣長按圖示 → 移除（iPhone）或解除安裝（Android）。</p></details>
+
+<footer>© 2026 Tender Pickle · 嫩肌匹克 · MIT License</footer>
+</div>
+</body>
+</html>

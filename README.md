@@ -5,6 +5,8 @@ Ad-free pickleball scoreboard with **serve lights**, so you never forget whether
 
 By **Tender Pickle (嫩肌匹克)** · MIT License
 
+📖 **User guide with screenshots · 圖文使用說明（含 iOS / Android 安裝）**: [guide/index.html](guide/index.html) — online: `https://hsiao0922.github.io/tender-pickle-scoreboard/guide/`
+
 ## Features · 功能
 
 - Serve lights: two lamps per team, the lit one is the current server (1st / 2nd) · 發球燈號
