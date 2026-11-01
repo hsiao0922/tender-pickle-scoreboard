@@ -366,6 +366,22 @@ dialog input[type="range"] { flex: 1; max-width: 220px; accent-color: var(--lamp
   #newgame.holding::after { transition: none; }
 }
 
+@media (min-width: 641px) {
+  /* one fixed row: buttons shrink to fit, so the bar never wraps when the score call gets wider */
+  #bar { flex-wrap: nowrap; }
+  #callout-box { flex: none; }
+  #callout { display: inline-block; min-width: 4.6em; text-align: center; }
+  #actions { flex: 1; flex-wrap: nowrap; min-width: 0; gap: 8px; }
+  #actions button {
+    flex: 1 1 0;
+    min-width: 0;
+    padding: 0 .3em;
+    white-space: nowrap;
+    font-size: clamp(.95rem, max(2.4vmin, 1.3vw), 1.6rem);
+  }
+  #voice { flex: 0 0 auto !important; }
+}
+
 /* ---------- compact landscape (phones) ---------- */
 @media (orientation: landscape) and (max-height: 520px) {
   #teams { gap: 6px; padding: 6px 6px 0; }
