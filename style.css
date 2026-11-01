@@ -92,15 +92,51 @@ button { font: inherit; color: inherit; cursor: pointer; }
   container-type: size;
 }
 .score {
+  --card: #1c3a12;
+  position: relative;
   font-weight: 900;
   line-height: 1;
   font-family: "Segoe UI Black", "Arial Black", "Helvetica Neue", system-ui, sans-serif;
   font-variant-numeric: tabular-nums;
   font-size: clamp(4rem, 26vmin, 16rem);
+  padding: .06em .2em;
+  perspective: 6em;
 }
 @supports (container-type: size) {
-  .score { font-size: min(78cqh, 60cqw); }
+  .score { font-size: min(76cqh, 50cqw); }
 }
+.team[data-team="1"] .score { --card: #561834; }
+
+/* flip-card: sizer keeps the layout, four half-cards do the drawing */
+.score .sz { color: transparent; }
+.score .h {
+  position: absolute;
+  left: 0; right: 0;
+  height: 50%;
+  overflow: hidden;
+  background: var(--card);
+  font-style: normal;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+.score .h b {
+  position: absolute;
+  left: 0; right: 0;
+  height: 200%;
+  display: grid;
+  place-items: center;
+  font-weight: inherit;
+  padding: .06em 0;
+}
+.score .t, .score .ft { top: 0; border-radius: .1em .1em 0 0; transform-origin: 50% 100%; }
+.score .t b, .score .ft b { top: 0; }
+.score .bo, .score .fb { bottom: 0; border-radius: 0 0 .1em .1em; transform-origin: 50% 0; box-shadow: inset 0 .012em 0 rgba(0, 0, 0, .55); }
+.score .bo b, .score .fb b { bottom: 0; }
+.score .ft, .score .fb { visibility: hidden; }
+.score.flipping .ft { visibility: visible; animation: flip-top .26s ease-in forwards; }
+.score.flipping .fb { visibility: visible; transform: rotateX(90deg); animation: flip-bottom .26s .26s ease-out forwards; }
+@keyframes flip-top { to { transform: rotateX(-90deg); } }
+@keyframes flip-bottom { to { transform: rotateX(0); } }
 
 /* ---------- serve lights ---------- */
 .serve {
@@ -203,9 +239,20 @@ button { font: inherit; color: inherit; cursor: pointer; }
   font-weight: 800;
   font-size: clamp(.9rem, 2.2vmin, 1.2rem);
 }
+#actions { gap: 12px; }
+#actions button {
+  min-height: clamp(60px, max(10vmin, 5vw), 96px);
+  padding: 0 1.3em;
+  border-radius: 16px;
+  font-size: clamp(1.1rem, max(3.2vmin, 1.6vw), 1.9rem);
+}
 #actions button:active { background: rgba(255, 246, 224, .25); }
 #fault { background: rgba(240, 98, 146, .25); border-color: var(--pink); }
-#voice { font-size: 1.3rem; padding: 0 .8em; }
+#voice { font-size: clamp(1.5rem, 4vmin, 2.2rem) !important; padding: 0 1em !important; }
+@media (orientation: portrait) and (max-width: 640px) {
+  #actions { display: grid; grid-template-columns: repeat(3, 1fr); width: 100%; gap: 8px; }
+  #actions button { padding: 0 .3em; font-size: 1.1rem; }
+}
 
 #newgame { position: relative; overflow: hidden; touch-action: none; }
 #newgame::after {
@@ -320,7 +367,7 @@ dialog input[type="range"] { flex: 1; max-width: 220px; accent-color: var(--lamp
   #bar { padding: 4px; gap: 4px 10px; flex-wrap: nowrap; }
   #callout-box span { display: none; }
   #actions { flex-wrap: nowrap; gap: 4px; }
-  #actions button { min-height: 40px; padding: 0 .55em; font-size: .8rem; white-space: nowrap; }
-  #voice { font-size: 1.1rem !important; }
+  #actions button { min-height: 50px; padding: 0 .7em; font-size: .9rem; white-space: nowrap; border-radius: 12px; }
+  #voice { font-size: 1.2rem !important; padding: 0 .8em !important; }
   footer { display: none; }
 }

@@ -4,7 +4,7 @@
 
   var E = PickleEngine;
   var KEY = 'tps.v1';
-  var VERSION = '1.4.1'; // keep in sync with CACHE in sw.js
+  var VERSION = '1.5.0'; // keep in sync with CACHE in sw.js
 
   var I18N = {
     'zh-TW': {
@@ -109,6 +109,53 @@
       point: el.querySelector('.point')
     };
   });
+  slots.forEach(buildFlip);
+
+  /* ---------- flip-card score ---------- */
+  var FLIP_MS = 520;
+  var reduceMotion = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function buildFlip(sl) {
+    var el = sl.score;
+    el.textContent = '';
+    var sz = document.createElement('span');
+    sz.className = 'sz';
+    el.appendChild(sz);
+    sl.faces = {};
+    ['t', 'bo', 'ft', 'fb'].forEach(function (k) {
+      var h = document.createElement('i');
+      h.className = 'h ' + k;
+      h.setAttribute('aria-hidden', 'true');
+      h.appendChild(document.createElement('b'));
+      el.appendChild(h);
+      sl.faces[k] = h.firstChild;
+    });
+    sl.sz = sz;
+    sl.shown = null;
+  }
+  function faces(sl, top, bottom, flapTop, flapBottom) {
+    sl.faces.t.textContent = top;
+    sl.faces.bo.textContent = bottom;
+    sl.faces.ft.textContent = flapTop;
+    sl.faces.fb.textContent = flapBottom;
+  }
+  function setScore(sl, val) {
+    val = String(val);
+    if (sl.shown === val) return;
+    var old = sl.shown;
+    sl.shown = val;
+    sl.sz.textContent = val;
+    clearTimeout(sl.flipTimer);
+    sl.score.classList.remove('flipping');
+    if (old === null || reduceMotion) { faces(sl, val, val, val, val); return; }
+    faces(sl, val, old, old, val);
+    void sl.score.offsetWidth; // restart the CSS animation
+    sl.score.classList.add('flipping');
+    sl.flipTimer = setTimeout(function () {
+      faces(sl, val, val, val, val);
+      sl.score.classList.remove('flipping');
+    }, FLIP_MS);
+  }
 
   /* ---------- render ---------- */
   function render() {
@@ -128,7 +175,7 @@
       sl.name.placeholder = slot === 0 ? t('left') : t('right');
       sl.name.setAttribute('aria-label', t('nameLabel'));
 
-      sl.score.textContent = g.scores[team];
+      setScore(sl, g.scores[team]);
 
       sl.lamps.forEach(function (lamp) {
         lamp.classList.toggle('on', serving && Number(lamp.dataset.n) === g.serverNum);
