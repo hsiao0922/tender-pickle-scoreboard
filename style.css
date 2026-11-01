@@ -281,6 +281,7 @@ footer {
   padding: 16px;
 }
 .over-card {
+  width: 100%;
   background: #1a2a14;
   border: 3px solid var(--pink);
   border-radius: 20px;
@@ -289,8 +290,16 @@ footer {
   max-width: 92vw;
 }
 .over-card h2 { margin: 0 0 8px; font-size: clamp(1.4rem, 5vmin, 2.6rem); }
-.over-card p { margin: 0 0 18px; font-size: clamp(2rem, 9vmin, 5rem); font-weight: 900; color: var(--lamp); }
-.over-actions { display: flex; gap: 10px; justify-content: center; }
+.over-card p { margin: 0; font-size: clamp(2rem, 9vmin, 5rem); font-weight: 900; color: var(--lamp); }
+.over-wrap { display: flex; flex-direction: column; align-items: center; gap: 22px; width: min(92vw, 560px); }
+.over-actions { display: flex; gap: 14px; justify-content: center; width: 100%; }
+#over .over-actions button:not(.primary) { background: #2b3a22; }
+#over .over-actions button {
+  flex: 1;
+  min-height: clamp(68px, 11vmin, 100px);
+  border-radius: 18px;
+  font-size: clamp(1.3rem, 4vmin, 2rem);
+}
 
 .primary { background: var(--btn) !important; color: var(--btn-ink); border-color: var(--btn) !important; }
 
