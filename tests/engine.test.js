@@ -47,13 +47,42 @@ test('only the serving team scores', function () {
   eq(s.scores, [0, 1]);
 });
 
-test('serve side follows the serving team score parity', function () {
+test('doubles: server switches court after each point', function () {
   var s = E.createGame({ firstServer: 0 });
   eq(E.serveSide(s), 'right');
   s = E.scorePoint(s);
   eq(E.serveSide(s), 'left');
   s = E.scorePoint(s);
   eq(E.serveSide(s), 'right');
+});
+
+test('doubles: every side out starts in the right court, even with an odd score', function () {
+  var s = E.createGame({ firstServer: 0 });
+  s = E.scorePoint(s);                 // 1-0-2, left
+  s = E.serverFault(s);                // side out -> 0-1-1
+  eq([E.callout(s), E.serveSide(s)], ['0-1-1', 'right']);
+  s = E.scorePoint(s);                 // 1-1-1
+  eq(E.serveSide(s), 'left');
+  s = E.serverFault(s);                // 1-1-2, partner in the other court
+  eq([E.callout(s), E.serveSide(s)], ['1-1-2', 'right']);
+  s = E.scorePoint(s);                 // 2-1-2
+  eq(E.serveSide(s), 'left');
+  s = E.serverFault(s);                // side out -> team 0 at 1 (odd)
+  eq([E.callout(s), E.serveSide(s)], ['1-2-1', 'right']);
+});
+
+test('doubles: second server serves from the court opposite the first server', function () {
+  var s = E.serverFault(E.createGame({ firstServer: 0 })); // 0-0-1 right
+  s = E.serverFault(s);                                     // 0-0-2
+  eq(E.serveSide(s), 'left');
+});
+
+test('doubles: game saved without side falls back to score parity', function () {
+  var s = E.createGame({ firstServer: 0 });
+  delete s.side;
+  s.scores = [3, 0];
+  eq(E.serveSide(s), 'left');
+  eq(E.serveSide(E.scorePoint(s)), 'right');
 });
 
 test('win at target with a 2 point lead', function () {

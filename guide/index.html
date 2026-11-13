@@ -62,7 +62,7 @@ footer{text-align:center;color:var(--mute);font-size:14px;margin-top:48px}
 <p>專為匹克球設計的計分板，最大的特色是用<strong>燈號</strong>顯示現在是第 1 發還是第 2 發，再也不會忘記誰該發球、該站哪一區。</p>
 <ul>
   <li><strong>發球燈號</strong>：每隊兩個燈，亮的就是目前的發球員。</li>
-  <li><strong>發球區提示</strong>：依發球隊分數自動顯示該在右區或左區發球。</li>
+  <li><strong>發球區提示</strong>：依官方雙打發球順序，自動顯示該在右區或左區發球。</li>
   <li><strong>自動報分</strong>：雙打自動產生如 <code>4-2-1</code> 的三段報分。</li>
   <li><strong>防誤按</strong>：只有發球方能按得分，接發方按鈕鎖住；新局要長按才會重置。</li>
   <li><strong>語音報分</strong>、<strong>復原</strong>、<strong>換邊</strong>、單打／雙打、11／15／21 分、是否領先 2 分。</li>
@@ -160,7 +160,7 @@ footer{text-align:center;color:var(--mute);font-size:14px;margin-top:48px}
     <p><span class="num">1</span><strong>隊名</strong>：點一下可輸入，留空則顯示「左邊隊伍／右邊隊伍」。</p>
     <p><span class="num">2</span><strong>比分</strong>：像車站翻牌顯示板一樣，得分時數字會往下翻頁。</p>
     <p><span class="num">3</span><strong>發球燈號</strong>：亮起的是目前發球員（第 1 發或第 2 發）。</p>
-    <p><span class="num">4</span><strong>發球區</strong>：<code>左</code>／<code>右</code> 亮起處就是應站的發球區（隊分偶數右區、奇數左區）。</p>
+    <p><span class="num">4</span><strong>發球區</strong>：<code>左</code>／<code>右</code> 亮起處就是這一發的發球區。</p>
     <p><span class="num">5</span><strong>+1 得分</strong>：發球方贏得這一球時按。外框螢光綠的就是發球方。</p>
     <p><span class="num">6</span><strong>接發方</strong>：按鈕鎖定，不能誤加分。</p>
     <p><span class="num">7</span><strong>報分</strong>：照這組數字唱分，如 <span class="call">4-2-1</span>。</p>
@@ -179,12 +179,12 @@ footer{text-align:center;color:var(--mute);font-size:14px;margin-top:48px}
 <p>採傳統<strong>換發制（Side-out）</strong>：只有發球方能得分。下面是一段實際流程：</p>
 <table>
   <tr><th>步驟</th><th>操作</th><th>報分</th><th>說明</th></tr>
-  <tr><td>開局</td><td>—</td><td><span class="call">0-0-2</span></td><td>先發球隊只有一個發球員，所以是「第 2 發」</td></tr>
+  <tr><td>開局</td><td>—</td><td><span class="call">0-0-2</span></td><td>先發球隊只有一個發球員，所以是「第 2 發」，從右區發球</td></tr>
   <tr><td>1</td><td>左隊按 <code>+1 得分</code></td><td><span class="call">1-0-2</span></td><td>發球隊得 1 分，換到左區發球</td></tr>
-  <tr><td>2</td><td>左隊發球失誤</td><td><span class="call">0-1-1</span></td><td>第 2 發失誤 → 換發，右隊從第 1 發開始</td></tr>
-  <tr><td>3</td><td>右隊按 <code>+1 得分</code></td><td><span class="call">1-1-1</span></td><td>右隊得分</td></tr>
-  <tr><td>4</td><td>右隊發球失誤</td><td><span class="call">1-1-2</span></td><td>第 1 發失誤 → 換同隊夥伴發球（第 2 發）</td></tr>
-  <tr><td>5</td><td>右隊再失誤</td><td><span class="call">1-1-1</span></td><td>第 2 發失誤 → 換發給左隊，從第 1 發開始</td></tr>
+  <tr><td>2</td><td>左隊發球失誤</td><td><span class="call">0-1-1</span></td><td>第 2 發失誤 → 換發，右隊第 1 發從<strong>右區</strong>開始</td></tr>
+  <tr><td>3</td><td>右隊按 <code>+1 得分</code></td><td><span class="call">1-1-1</span></td><td>右隊得分，發球員換到左區</td></tr>
+  <tr><td>4</td><td>右隊發球失誤</td><td><span class="call">1-1-2</span></td><td>第 1 發失誤 → 換同隊夥伴發球（第 2 發），夥伴站在右區</td></tr>
+  <tr><td>5</td><td>右隊再失誤</td><td><span class="call">1-1-1</span></td><td>第 2 發失誤 → 換發給左隊；雖然左隊是 1 分（奇數），仍從<strong>右區</strong>開始</td></tr>
 </table>
 <div class="shots">
   <figure><img src="img/start.png" alt="開局畫面"><figcaption>開局 <code>0-0-2</code></figcaption></figure>
@@ -202,7 +202,9 @@ footer{text-align:center;color:var(--mute);font-size:14px;margin-top:48px}
   <li>雙打報分三個數字：<code>發球方分數 – 接發方分數 – 發球員編號(1 或 2)</code>。</li>
   <li>每局先發球隊從 <code>0-0-2</code> 開始，只有一位發球員，第一次失誤直接換發。</li>
   <li>第 1 發失誤 → 換夥伴發球；第 2 發失誤 → 換發，對方從第 1 發開始。</li>
-  <li>發球隊分數偶數 → 右區發球；奇數 → 左區發球。</li>
+  <li>雙打發球區：每次換發都從<strong>右區</strong>開始；得分後發球員換到另一區；第 2 發由夥伴在第 1 發的另一區發球。</li>
+  <li>隊伍分數偶數／奇數只用來檢查站位：這局最先發球的那位，隊伍分數偶數時應站右邊、奇數時站左邊。</li>
+  <li>單打：自己分數偶數右區、奇數左區。</li>
   <li>達目標分數並領先 2 分獲勝（可在設定關閉「需領先 2 分」）。</li>
 </ol>
 <p class="sub">目前尚未支援 Rally 計分（每球得分制）。</p>

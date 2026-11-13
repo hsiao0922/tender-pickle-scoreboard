@@ -10,7 +10,7 @@ By **Tender Pickle (嫩肌匹克)** · MIT License
 ## Features · 功能
 
 - Serve lights: two lamps per team, the lit one is the current server (1st / 2nd) · 發球燈號
-- Serve side hint (right / left court) from the serving team's score · 右區 / 左區發球提示
+- Serve side hint (right / left court) following the official doubles service sequence · 右區 / 左區發球提示
 - Score call in doubles format, e.g. `4-2-1` · 自動報分
 - Only the serving team can score; the receiving team's button is locked · 接發方按鈕鎖定
 - Doubles (with the `0-0-2` start rule) and singles · 雙打、單打
@@ -31,7 +31,9 @@ Traditional side-out scoring:
 2. Doubles score call: `serving score – receiving score – server number (1 or 2)`. 雙打報分三個數字。
 3. The first serving team of a game starts at `0-0-2`: only one server, so its first fault is a side out. 開局 `0-0-2`，第一次失誤直接換發。
 4. Server 1 faults → server 2 serves. Server 2 faults → side out, the other team starts with server 1. 第 1 發失誤換夥伴，第 2 發失誤換對方。
-5. Serve from the right court when the serving team's score is even, left court when odd. 發球隊分數偶數右區、奇數左區。
+5. Doubles serve court (USA Pickleball 4.B.4 / 4.B.6): every side out starts from the right court; the server switches court after each point won; the second server serves from the court opposite the first server. 雙打：每次換發都從右區開始，得分後換區，第 2 發從第 1 發的另一區發。
+   The team score only tells where the game's starting server should stand: even → right, odd → left. 隊伍分數偶數／奇數只用來檢查開局發球員該站右／左。
+   Singles: serve from the right when the server's score is even, left when odd. 單打：自己分數偶數右區、奇數左區。
 6. Singles: two-number call, no server number, same side rule. 單打只報兩個數字。
 7. Win at the target score with a 2-point lead (win-by-2 can be turned off). 達目標分數並領先 2 分獲勝。
 

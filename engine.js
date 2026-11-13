@@ -6,7 +6,10 @@
  *  - only the serving team scores
  *  - doubles: each team has server 1 and server 2; the first serving team of a game
  *    starts with only one server (0-0-2), so its first fault is a side out
- *  - serve side: serving team's own score even -> right court, odd -> left court
+ *  - serve side, doubles (USA Pickleball 4.B.4 / 4.B.6): every side out starts in the
+ *    right/even court; the server switches court after each point won; the second
+ *    server serves from the partner's court (opposite the first server)
+ *  - serve side, singles: server's own score even -> right court, odd -> left court
  */
 (function (root, factory) {
   if (typeof module === 'object' && module.exports) module.exports = factory();
@@ -24,6 +27,7 @@
       scores: [0, 0],
       server: opts.firstServer === 1 ? 1 : 0, // team index that is serving
       serverNum: mode === 'doubles' ? 2 : 1,  // 0-0-2 start rule in doubles
+      side: 'right',                          // doubles serve court
       over: false,
       winner: null
     };
@@ -37,6 +41,7 @@
       scores: [s.scores[0], s.scores[1]],
       server: s.server,
       serverNum: s.serverNum,
+      side: s.side,
       over: s.over,
       winner: s.winner
     };
@@ -53,6 +58,7 @@
   function scorePoint(s) {
     if (s.over) return s;
     var n = clone(s);
+    n.side = other(serveSide(s)); // server switches court after a point
     n.scores[n.server] += 1;
     if (isWinner(n, n.server)) {
       n.over = true;
@@ -67,15 +73,21 @@
     var n = clone(s);
     if (n.mode === 'doubles' && n.serverNum === 1) {
       n.serverNum = 2;
+      n.side = other(serveSide(s)); // partner stands in the other court
     } else {
       n.server = 1 - n.server;
       n.serverNum = 1;
+      n.side = 'right'; // every side out starts in the right/even court
     }
     return n;
   }
 
+  function other(side) { return side === 'right' ? 'left' : 'right'; }
+
   // 'right' or 'left' court for the current server.
   function serveSide(s) {
+    if (s.mode === 'doubles' && s.side) return s.side;
+    // singles, or a doubles game saved before `side` existed
     return s.scores[s.server] % 2 === 0 ? 'right' : 'left';
   }
 
