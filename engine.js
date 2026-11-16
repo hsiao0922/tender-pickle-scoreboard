@@ -10,6 +10,12 @@
  *    right/even court; the server switches court after each point won; the second
  *    server serves from the partner's court (opposite the first server)
  *  - serve side, singles: server's own score even -> right court, odd -> left court
+ *
+ * Rally scoring (USA Pickleball provisional rule, 2025):
+ *  - every rally scores a point for the side that wins it, except the winning point,
+ *    which can only be scored by the serving side (receiver at game point: side out only)
+ *  - one server per side out (no server 2, no 0-0-2), score call has two numbers
+ *  - serve side follows the same court rules as side-out scoring
  */
 (function (root, factory) {
   if (typeof module === 'object' && module.exports) module.exports = factory();
@@ -20,13 +26,15 @@
   function createGame(opts) {
     opts = opts || {};
     var mode = opts.mode === 'singles' ? 'singles' : 'doubles';
+    var scoring = opts.scoring === 'rally' ? 'rally' : 'sideout';
     return {
       mode: mode,
+      scoring: scoring,
       target: opts.target || 11,
       winByTwo: opts.winByTwo !== false,
       scores: [0, 0],
       server: opts.firstServer === 1 ? 1 : 0, // team index that is serving
-      serverNum: mode === 'doubles' ? 2 : 1,  // 0-0-2 start rule in doubles
+      serverNum: mode === 'doubles' && scoring === 'sideout' ? 2 : 1, // 0-0-2 start rule
       side: 'right',                          // doubles serve court
       over: false,
       winner: null
@@ -36,6 +44,7 @@
   function clone(s) {
     return {
       mode: s.mode,
+      scoring: s.scoring,
       target: s.target,
       winByTwo: s.winByTwo,
       scores: [s.scores[0], s.scores[1]],
@@ -45,6 +54,11 @@
       over: s.over,
       winner: s.winner
     };
+  }
+
+  // Doubles side-out scoring is the only format with server 1 / server 2.
+  function usesServerNum(s) {
+    return s.mode === 'doubles' && s.scoring !== 'rally';
   }
 
   function isWinner(s, team) {
@@ -67,10 +81,24 @@
     return n;
   }
 
+  // Rally scoring: would one more point win the game for the receiving side?
+  function receiverAtGamePoint(s) {
+    var n = clone(s);
+    n.scores[1 - n.server] += 1;
+    return isWinner(n, 1 - n.server);
+  }
+
   // The serving team lost the rally (fault).
   function serverFault(s) {
     if (s.over) return s;
     var n = clone(s);
+    if (n.scoring === 'rally') {
+      if (!receiverAtGamePoint(s)) n.scores[1 - n.server] += 1;
+      n.server = 1 - n.server;
+      n.serverNum = 1;
+      n.side = 'right';
+      return n;
+    }
     if (n.mode === 'doubles' && n.serverNum === 1) {
       n.serverNum = 2;
       n.side = other(serveSide(s)); // partner stands in the other court
@@ -84,6 +112,11 @@
 
   function other(side) { return side === 'right' ? 'left' : 'right'; }
 
+  // `team` won the rally (works for both scoring systems).
+  function rallyWon(s, team) {
+    return team === s.server ? scorePoint(s) : serverFault(s);
+  }
+
   // 'right' or 'left' court for the current server.
   function serveSide(s) {
     if (s.mode === 'doubles' && s.side) return s.side;
@@ -91,17 +124,20 @@
     return s.scores[s.server] % 2 === 0 ? 'right' : 'left';
   }
 
-  // Score call: doubles "4-2-1" (server - receiver - server number), singles "4-2".
+  // Score call: doubles side-out "4-2-1" (server - receiver - server number), otherwise "4-2".
   function callout(s) {
     var a = s.scores[s.server];
     var b = s.scores[1 - s.server];
-    return s.mode === 'doubles' ? a + '-' + b + '-' + s.serverNum : a + '-' + b;
+    return usesServerNum(s) ? a + '-' + b + '-' + s.serverNum : a + '-' + b;
   }
 
   return {
     createGame: createGame,
     scorePoint: scorePoint,
     serverFault: serverFault,
+    rallyWon: rallyWon,
+    receiverAtGamePoint: receiverAtGamePoint,
+    usesServerNum: usesServerNum,
     serveSide: serveSide,
     callout: callout
   };

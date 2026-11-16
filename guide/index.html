@@ -54,7 +54,7 @@ footer{text-align:center;color:var(--mute);font-size:14px;margin-top:48px}
   <a class="cta" href="https://hsiao0922.github.io/tender-pickle-scoreboard/">開啟計分板</a>
   <nav>
     <a href="#features">特色</a><a href="#install">安裝到桌面</a><a href="#ui">畫面導覽</a><a href="#play">怎麼計分</a>
-    <a href="#rules">規則</a><a href="#settings">設定</a><a href="#voice">語音報分</a><a href="#faq">常見問題</a>
+    <a href="#rules">規則</a><a href="#rally">落地得分</a><a href="#settings">設定</a><a href="#voice">語音報分</a><a href="#faq">常見問題</a>
   </nav>
 </header>
 
@@ -207,7 +207,16 @@ footer{text-align:center;color:var(--mute);font-size:14px;margin-top:48px}
   <li>單打：自己分數偶數右區、奇數左區。</li>
   <li>達目標分數並領先 2 分獲勝（可在設定關閉「需領先 2 分」）。</li>
 </ol>
-<p class="sub">目前尚未支援 Rally 計分（每球得分制）。</p>
+<h3 id="rally">落地得分（Rally）</h3>
+<p>在設定的「計分方式」選擇「落地得分（Rally）」。單打／雙打、11／15／21 分、需領先 2 分都可以照常選擇。</p>
+<ol>
+  <li>每一球都計分：贏得這一球的一方得 1 分，接發方贏球時同時取得發球權。</li>
+  <li><strong>局點只能在發球時得分</strong>：接發方在局點贏球，只會換回發球權，不加分。按鈕會顯示「換發（局點須發球得分）」提醒。</li>
+  <li>每次換發只有一位發球員，沒有第 2 發，也沒有 <code>0-0-2</code>。報分只有兩個數字，例如 <span class="call">5-3</span>。</li>
+  <li>發球區規則和換發制相同：雙打每次換發從右區開始，得分後換區。</li>
+  <li>操作：兩隊的按鈕都可以按，按「贏得這一球」的那一隊。發球方的按鈕是「+1 得分」，接發方是「+1 得分・換發」。</li>
+</ol>
+<p class="sub">Rally 目前是 USA Pickleball 的暫行規則，一般比賽仍以換發制為主。</p>
 
 <h2 id="settings">設定說明</h2>
 <div class="two">
@@ -216,6 +225,7 @@ footer{text-align:center;color:var(--mute);font-size:14px;margin-top:48px}
     <table>
       <tr><th>項目</th><th>說明</th></tr>
       <tr><td>賽制</td><td>雙打／單打</td></tr>
+      <tr><td>計分方式</td><td>換發制（傳統）／落地得分（Rally）</td></tr>
       <tr><td>目標分數</td><td>11、15 或 21</td></tr>
       <tr><td>需領先 2 分</td><td>勾選＝達標後還要贏對方 2 分</td></tr>
       <tr><td>先發球</td><td>開局由左邊或右邊隊伍先發</td></tr>
@@ -223,7 +233,7 @@ footer{text-align:center;color:var(--mute);font-size:14px;margin-top:48px}
       <tr><td>保持螢幕恆亮</td><td>比賽中螢幕不會自動關閉</td></tr>
       <tr><td>語音相關</td><td>見下一節</td></tr>
     </table>
-    <div class="panel warn">變更賽制、目標分數或先發球會<strong>重新開始新局</strong>，目前比分會清除（會先詢問確認）。</div>
+    <div class="panel warn">變更賽制、計分方式、目標分數或先發球會<strong>重新開始新局</strong>，目前比分會清除（會先詢問確認）。</div>
   </div>
 </div>
 

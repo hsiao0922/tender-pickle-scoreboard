@@ -149,6 +149,57 @@ test('singles: serve side by own score parity', function () {
   eq(E.serveSide(s), 'left');
 });
 
+test('rally doubles: starts 0-0 with one server, two-number call', function () {
+  var s = E.createGame({ scoring: 'rally', firstServer: 0 });
+  eq([E.callout(s), s.serverNum, E.usesServerNum(s)], ['0-0', 1, false]);
+});
+
+test('rally: receiver winning a rally scores and gets the serve from the right', function () {
+  var s = E.createGame({ scoring: 'rally', firstServer: 0 });
+  s = E.scorePoint(s);                     // 1-0, server moves to the left
+  eq(E.serveSide(s), 'left');
+  s = E.rallyWon(s, 1);                    // receiver wins: point + side out
+  eq([s.scores, s.server, E.callout(s), E.serveSide(s)], [[1, 1], 1, '1-1', 'right']);
+});
+
+test('rally: one fault is a side out (no second server)', function () {
+  var s = E.createGame({ scoring: 'rally', firstServer: 1 });
+  s = E.serverFault(s);
+  eq([s.server, s.scores], [0, [1, 0]]);
+});
+
+test('rally: receiver at game point only wins the serve back', function () {
+  var s = E.createGame({ scoring: 'rally', firstServer: 0 });
+  s.scores = [5, 10];
+  eq(E.receiverAtGamePoint(s), true);
+  s = E.rallyWon(s, 1);
+  eq([s.scores, s.server, s.over], [[5, 10], 1, false]);
+  s = E.rallyWon(s, 1);                    // now serving: wins
+  eq([s.scores, s.over, s.winner], [[5, 11], true, 1]);
+});
+
+test('rally: win by two still applies; receiver can score to 10-10', function () {
+  var s = E.createGame({ scoring: 'rally', firstServer: 0 });
+  s.scores = [10, 9];
+  s = E.rallyWon(s, 1);                    // 10-10 is not a winning point
+  eq([s.scores, s.server], [[10, 10], 1]);
+  s = E.rallyWon(s, 1);                    // 10-11 on serve, not a 2 point lead
+  eq(s.over, false);
+  s = E.rallyWon(s, 0);                    // receiver ties 11-11
+  eq([s.scores, s.server], [[11, 11], 0]);
+});
+
+test('rally singles: serve side by own score parity', function () {
+  var s = E.createGame({ mode: 'singles', scoring: 'rally', firstServer: 0 });
+  s = E.rallyWon(s, 1);                    // 0-1, team 1 serves at 1 -> left
+  eq([E.callout(s), E.serveSide(s)], ['1-0', 'left']);
+});
+
+test('side-out: rallyWon by the receiver is a plain fault', function () {
+  var s = E.createGame({ firstServer: 0 });
+  eq(E.rallyWon(s, 1), E.serverFault(s));
+});
+
 test('functions do not mutate the previous state', function () {
   var s = E.createGame({ firstServer: 0 });
   var snapshot = JSON.stringify(s);

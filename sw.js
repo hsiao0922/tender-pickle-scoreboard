@@ -3,7 +3,7 @@
  * when offline (or the network is slower than TIMEOUT) the cached copy is used.
  * Bump CACHE (and VERSION in app.js) when any file changes.
  */
-var CACHE = 'tender-pickle-v1.6.0';
+var CACHE = 'tender-pickle-v1.7.0';
 var TIMEOUT = 4000;
 var FILES = [
   './', 'index.html', 'style.css', 'engine.js', 'app.js', 'manifest.json',

@@ -4,7 +4,7 @@
 
   var E = PickleEngine;
   var KEY = 'tps.v1';
-  var VERSION = '1.6.0'; // keep in sync with CACHE in sw.js
+  var VERSION = '1.7.0'; // keep in sync with CACHE in sw.js
 
   var I18N = {
     'zh-TW': {
@@ -16,8 +16,10 @@
       confirmNew: '要開始新局嗎？目前的比分會清除。',
       confirmRestart: '更改規則會重新開始新局，確定嗎？',
       sTitle: '設定', sMode: '賽制', singles: '單打', doubles: '雙打', sTarget: '目標分數',
+      sScoring: '計分方式', sideout: '換發制（傳統）', rally: '落地得分（Rally）', calloutRally: '報分・Rally',
+      rallyRecv: '+1 得分・換發', rallySideOut: '換發（局點須發球得分）',
       sWinBy2: '需領先 2 分才獲勝', sFirst: '先發球', sLang: '語言', sWake: '保持螢幕恆亮',
-      sNote: '賽制、分數、先發球的變更會重新開始新局。', save: '儲存', cancel: '取消',
+      sNote: '賽制、計分方式、分數、先發球的變更會重新開始新局。', save: '儲存', cancel: '取消',
       nameLabel: '隊名（可留空）',
       voiceOn: '語音報分：開', voiceOff: '語音報分：關', voiceTest: '語音報分已開啟',
       sVoice: '語音報分', sVoiceTeam: '報分前先講發球隊名稱', sRate: '語速', sVolume: '音量',
@@ -35,8 +37,10 @@
       confirmNew: 'Start a new game? The current score will be cleared.',
       confirmRestart: 'Changing the rules starts a new game. Continue?',
       sTitle: 'Settings', sMode: 'Format', singles: 'Singles', doubles: 'Doubles', sTarget: 'Play to',
+      sScoring: 'Scoring', sideout: 'Side-out (traditional)', rally: 'Rally scoring', calloutRally: 'Score · Rally',
+      rallyRecv: '+1 Point · Side out', rallySideOut: 'Side out (game point on serve only)',
       sWinBy2: 'Win by 2', sFirst: 'First serve', sLang: 'Language', sWake: 'Keep screen on',
-      sNote: 'Changing format, target or first serve starts a new game.', save: 'Save', cancel: 'Cancel',
+      sNote: 'Changing format, scoring, target or first serve starts a new game.', save: 'Save', cancel: 'Cancel',
       nameLabel: 'Team name (optional)',
       voiceOn: 'Voice score: on', voiceOff: 'Voice score: off', voiceTest: 'Voice score is on',
       sVoice: 'Announce score by voice', sVoiceTeam: 'Say the serving team name first', sRate: 'Speed', sVolume: 'Volume',
@@ -48,7 +52,7 @@
   };
 
   var DEFAULTS = {
-    mode: 'doubles', target: 11, winByTwo: true, firstSlot: 0, wake: true,
+    mode: 'doubles', scoring: 'sideout', target: 11, winByTwo: true, firstSlot: 0, wake: true,
     voice: false, voiceTeam: false, voiceName: '', rate: 1, volume: 1,
     lang: /^zh/i.test(navigator.language || '') ? 'zh-TW' : 'en'
   };
@@ -59,6 +63,7 @@
   function newGameFor(settings, flip) {
     return E.createGame({
       mode: settings.mode,
+      scoring: settings.scoring,
       target: settings.target,
       winByTwo: settings.winByTwo,
       firstServer: flip ? 1 - settings.firstSlot : settings.firstSlot
@@ -162,13 +167,15 @@
     var g = state.game;
     document.documentElement.lang = state.settings.lang;
     document.querySelectorAll('[data-i18n]').forEach(function (n) { n.textContent = t(n.getAttribute('data-i18n')); });
+    var rally = g.scoring === 'rally';
+    $('callout-label').textContent = t(rally ? 'calloutRally' : 'callout');
 
     slots.forEach(function (sl, slot) {
       var team = teamAt(slot);
       var serving = !g.over && g.server === team;
       sl.el.dataset.team = team;
       sl.el.classList.toggle('serving', serving);
-      sl.el.classList.toggle('single', g.mode === 'singles');
+      sl.el.classList.toggle('single', !E.usesServerNum(g));
       sl.el.classList.toggle('winner', g.over && g.winner === team);
 
       if (document.activeElement !== sl.name) sl.name.value = state.names[team] || '';
@@ -183,15 +190,20 @@
 
       var side = E.serveSide(g);
       sl.info.textContent = serving
-        ? (g.mode === 'doubles' ? t('serverN', { n: g.serverNum }) + ' · ' : '') + (side === 'right' ? t('sideRight') : t('sideLeft'))
+        ? (E.usesServerNum(g) ? t('serverN', { n: g.serverNum }) + ' · ' : '') + (side === 'right' ? t('sideRight') : t('sideLeft'))
         : '';
       sl.court.forEach(function (c) {
         c.textContent = c.dataset.side === 'left' ? t('courtL') : t('courtR');
         c.classList.toggle('on', serving && c.dataset.side === side);
       });
 
-      sl.point.disabled = !serving;
-      sl.point.textContent = serving ? t('point') : (g.over ? '—' : t('receiving'));
+      if (rally && !g.over && !serving) {
+        sl.point.disabled = false;
+        sl.point.textContent = t(E.receiverAtGamePoint(g) ? 'rallySideOut' : 'rallyRecv');
+      } else {
+        sl.point.disabled = !serving;
+        sl.point.textContent = serving ? t('point') : (g.over ? '—' : t('receiving'));
+      }
     });
 
     $('callout').textContent = E.callout(g);
@@ -234,8 +246,8 @@
   }
   function point(slot) {
     var g = state.game, team = teamAt(slot);
-    if (g.over || g.server !== team) { shake(slot); return; }
-    apply(E.scorePoint(g));
+    if (g.over || (g.server !== team && g.scoring !== 'rally')) { shake(slot); return; }
+    apply(E.rallyWon(g, team));
   }
   function fault() { if (!state.game.over) apply(E.serverFault(state.game)); }
   function undo() {
@@ -315,6 +327,7 @@
   function openSettings() {
     var s = state.settings;
     form.mode.value = s.mode;
+    form.scoring.value = s.scoring;
     form.target.value = String(s.target);
     form.winByTwo.checked = s.winByTwo;
     form.firstSlot.value = String(s.firstSlot);
@@ -334,6 +347,7 @@
     var s = state.settings;
     var next = {
       mode: form.mode.value,
+      scoring: form.scoring.value,
       target: Number(form.target.value),
       winByTwo: form.winByTwo.checked,
       firstSlot: Number(form.firstSlot.value),
@@ -345,7 +359,7 @@
       volume: Number(form.volume.value),
       voiceName: form.voiceName.value
     };
-    var rulesChanged = next.mode !== s.mode || next.target !== s.target ||
+    var rulesChanged = next.mode !== s.mode || next.scoring !== s.scoring || next.target !== s.target ||
       next.winByTwo !== s.winByTwo || next.firstSlot !== s.firstSlot;
     var inProgress = state.history.length > 0 || state.game.scores[0] + state.game.scores[1] > 0;
     if (rulesChanged && inProgress && !window.confirm(I18N[next.lang].confirmRestart)) return;
@@ -465,7 +479,7 @@
     if (g.server !== prev.server) parts.push(t('spSideOut'));
     if (state.settings.voiceTeam) parts.push(t('spServing', { name: teamName(g.server) }));
     parts.push(g.scores[g.server], g.scores[1 - g.server]);
-    if (g.mode === 'doubles') parts.push(t('spServer', { n: g.serverNum }));
+    if (E.usesServerNum(g)) parts.push(t('spServer', { n: g.serverNum }));
     speak(parts.join(state.settings.lang === 'zh-TW' ? '，' : ', '));
   }
   if (canSpeak && speechSynthesis.getVoices) speechSynthesis.getVoices(); // warm up the voice list

@@ -40,7 +40,7 @@
 
   <div id="bar">
     <span id="net" class="net" role="img"></span>
-    <div id="callout-box"><span data-i18n="callout"></span><b id="callout">0-0-2</b></div>
+    <div id="callout-box"><span id="callout-label"></span><b id="callout">0-0-2</b></div>
     <div id="actions">
       <button id="fault" type="button" data-i18n="fault"></button>
       <button id="undo" type="button" data-i18n="undo"></button>
@@ -73,6 +73,12 @@
         <legend data-i18n="sMode"></legend>
         <label><input type="radio" name="mode" value="doubles"> <span data-i18n="doubles"></span></label>
         <label><input type="radio" name="mode" value="singles"> <span data-i18n="singles"></span></label>
+      </fieldset>
+
+      <fieldset>
+        <legend data-i18n="sScoring"></legend>
+        <label><input type="radio" name="scoring" value="sideout"> <span data-i18n="sideout"></span></label>
+        <label><input type="radio" name="scoring" value="rally"> <span data-i18n="rally"></span></label>
       </fieldset>
 
       <fieldset>

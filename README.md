@@ -37,7 +37,14 @@ Traditional side-out scoring:
 6. Singles: two-number call, no server number, same side rule. 單打只報兩個數字。
 7. Win at the target score with a 2-point lead (win-by-2 can be turned off). 達目標分數並領先 2 分獲勝。
 
-Rally scoring is not implemented yet. 尚未支援 Rally 計分。
+### Rally scoring · 落地得分（Settings → Scoring）
+
+USA Pickleball provisional rule (2025). Singles or doubles, play to 11 / 15 / 21, win-by-2 optional, same as side-out.
+
+1. Every rally scores a point for the side that wins it. 每一球都計分，贏球的一方得分。
+2. The winning point can only be scored by the serving side; a receiver at game point who wins the rally only gets the serve back. 局點只能在發球時得分；接發方在局點贏球只換回發球權。
+3. One server per side out (no server 2, no `0-0-2`); the score call has two numbers, e.g. `5-3`. 每次只有一位發球員，報分兩個數字。
+4. Serve court follows the same rules as side-out scoring (doubles: each side out starts from the right). 發球區規則同換發制。
 
 ## Controls · 操作
 
